@@ -29,7 +29,7 @@
 
 [EGVAR(db,debug), "openPersistentTab", format ["'%1' opened Persistent Tab.", EGVAR(db,host)], false] call adf_utils_fnc_debug;
 
-createDialog "persistentMenu";
+createDialog "RscPersistentMenu";
 
 //  Tab ID
 EGVAR(db,listBox) = 1102;

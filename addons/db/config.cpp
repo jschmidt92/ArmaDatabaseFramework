@@ -14,3 +14,5 @@ class CfgPatches {
 };
 
 #include "CfgEventHandlers.hpp"
+#include "ui\RscCommon.hpp"
+#include "ui\RscPersistentMenu.hpp"
