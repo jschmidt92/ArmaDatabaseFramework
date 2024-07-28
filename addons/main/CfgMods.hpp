@@ -3,7 +3,7 @@ class CfgMods {
         dir = "@adf";
         name = "Arma Database Framework";
         author = "J. Schmidt";
-        picture = "";
+        picture = "title_co.paa";
         hideName = "false";
         hidePicture = "false";
         action  = "";
