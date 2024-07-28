@@ -2,3 +2,12 @@ name = "Arma Database Framework"
 author = "J. Schmidt"
 prefix = "adf"
 mainprefix = "z"
+
+[files]
+include = [
+    "adf_version.json",
+    "*.paa",
+]
+
+[version]
+git_hash = 0 # Disabled
