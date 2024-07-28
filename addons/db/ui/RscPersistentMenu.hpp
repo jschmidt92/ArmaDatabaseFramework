@@ -26,7 +26,7 @@ class RscPersistentMenu {
 		};
 		class button_save: RscButton {
 			idc = 1103;
-			action = "[] call F90_fnc_saveToSlot";
+			action = "[] call adf_db_fnc_saveToSlot";
 
 			text = "Save"; //--- ToDo: Localize;
 			x = 0.216406 * safezoneW + safezoneX;
@@ -38,7 +38,7 @@ class RscPersistentMenu {
 		};
 		class button_load: RscButton {
 			idc = 1104;
-			action = "[] call F90_fnc_loadFromSlot";
+			action = "[] call adf_db_fnc_loadFromSlot";
 
 			text = "Load"; //--- ToDo: Localize;
 			x = 0.216406 * safezoneW + safezoneX;
@@ -50,7 +50,7 @@ class RscPersistentMenu {
 		};
 		class button_delete: RscButton {
 			idc = 1105;
-			action = "[] call F90_fnc_deleteSlot";
+			action = "[] call adf_db_fnc_deleteSlot";
 
 			text = "Delete"; //--- ToDo: Localize;
 			x = 0.216406 * safezoneW + safezoneX;
@@ -72,7 +72,7 @@ class RscPersistentMenu {
 		};
 		class button_saveVehicle: RscButton {
 			idc = 1107;
-			action = "[] call F90_fnc_saveTarget";
+			action = "[0] call adf_db_fnc_saveTarget";
 
 			text = "Save Vehicle"; //--- ToDo: Localize;
 			x = 0.216406 * safezoneW + safezoneX;
@@ -84,7 +84,7 @@ class RscPersistentMenu {
 		};
 		class button_saveContainer: RscButton {
 			idc = 1108;
-			action = "[] call F90_fnc_saveTargetContainer";
+			action = "[1] call adf_db_fnc_saveTarget";
 
 			text = "Save Container"; //--- ToDo: Localize;
 			x = 0.216406 * safezoneW + safezoneX;
