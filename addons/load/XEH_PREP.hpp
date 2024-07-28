@@ -1,1 +1,10 @@
 PREP(containers);
+PREP(entity);
+PREP(environment);
+PREP(fromNamespace);
+PREP(game);
+PREP(mapMarkers);
+PREP(unitData);
+PREP(groupData);
+PREP(variables);
+PREP(vehs);

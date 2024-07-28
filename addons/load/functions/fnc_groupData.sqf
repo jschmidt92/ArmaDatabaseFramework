@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 
 /*
- * Function: adf_load_fnc_unitGroupData
+ * Function: adf_load_fnc_groupData
  * Author: NikolaiF90, J.Schmidt
  * Edit: 07.27.2024
  * Copyright © 2024 NikolaiF90, J.Schmidt, All rights reserved
@@ -24,7 +24,7 @@
  * The return <OBJECT>
  *
  * Examples:
- * [_data, _leader] call adf_load_fnc_unitGroupData
+ * [_data, _leader] call adf_load_fnc_groupData
  *
  * Public: Yes
  */

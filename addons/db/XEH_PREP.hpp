@@ -1,7 +1,7 @@
 PREP(config);
 PREP(deleteSlot);
-PREP(date);
 PREP(getSelectedList);
+PREP(init);
 PREP(loadFromSlot);
 PREP(makePersistent);
 PREP(openPersistentTab);
