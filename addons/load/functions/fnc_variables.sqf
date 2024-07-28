@@ -40,7 +40,7 @@ private _allVariables = ["variables", _slot] call DEFUNC(core,loadData);
     private _key = _x # 1;
 	private _value = _x # 2;
 
-	[_namespace, _key, _value] call DEFUNC(utils,saveToNamespace);
+	[_namespace, _key, _value] call DEFUNC(save,toNamespace);
 
 	EGVAR(db,vars) pushBack [_namespace, _key];
     true

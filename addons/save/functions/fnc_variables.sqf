@@ -36,7 +36,7 @@ private _allVariables = [];
 {
 	private _namespace = _x # 0;
 	private _name = _x # 1;
-	private _value = [_namespace, _name] call DEFUNC(utils,loadFromNamespace);
+	private _value = [_namespace, _name] call DEFUNC(load,fromNamespace);
 
     _allVariables pushBack [_namespace, _name, _value];
     true

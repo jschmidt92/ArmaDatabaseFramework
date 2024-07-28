@@ -2,9 +2,9 @@
 
 /*
  * Function: adf_db_fnc_getSelectedList
- * Author: NikolaiF90, PrinceF90, J.Schmidt
+ * Author: NikolaiF90, NikolaiF90, J.Schmidt
  * Edit: 07.27.2024
- * Copyright © 2024 NikolaiF90, PrinceF90, J.Schmidt, All rights reserved
+ * Copyright © 2024 NikolaiF90, NikolaiF90, J.Schmidt, All rights reserved
  *
  * Do not edit without permission!
  *
