@@ -1,0 +1,10 @@
+PREP(config);
+PREP(deleteSlot);
+PREP(date);
+PREP(getSelectedList);
+PREP(loadFromSlot);
+PREP(makePersistent);
+PREP(openPersistentTab);
+PREP(saveTarget);
+PREP(saveToSlot);
+PREP(updatePersistentList);
