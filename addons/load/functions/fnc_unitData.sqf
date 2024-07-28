@@ -175,27 +175,27 @@ private _fnc_setRating = {
     private _value = _x # 1;
 
     switch (_key) do {
-        case: "assignedTeam": { _unit assignTeam _value; };
-        case: "class": { _tmpArgs pushBack _value; };
-        case: "damages": { [_unit, _value] call DEFUNC(utils,applyDamage); };
-        case: "face": { _unit setFace _value; };
-        case: "fatigue": { _unit setFatigue _value; };
-        case: "formationDir": { _unit setFormDir _value; };
-        case: "generalDamage": { _unit setDamage _value; };
-        case: "group": { [_unit, _value] call _fnc_loadGroupUnits; };
-        case: "groupOrders": { [_unit, _value] call _fnc_loadGroupOrders; };
-        case: "loadout": { _unit setUnitLoadout _value; };
-        case: "name": { [_unit, _value] call _fnc_restoreName; };
-        case: "orders": { [_unit, _value] call _fnc_loadOrders; };
-        case: "pitch": { _unit setPitch _value; };
-        case: "posDir": { [_unit, _value] call DEFUNC(utils,applyPosDir); };
-        case: "rating": { [_unit, _value] call _fnc_setRating; };
-        case: "side": { _tmpArgs pushBack _value; };
-        case: "skills": { [_unit, _value] call _fnc_loadSkills; };
-        case: "speaker": { _unit setSpeaker _value; };
-        case: "stamina": { _unit setStamina _value; };
-        case: "variables": { [_unit, _value] call _fnc_loadVariables; };
-        case: "vehicle": { [_unit, _value] call DEFUNC(utils,addUnitToVehicle); };
+        case "assignedTeam": { _unit assignTeam _value; };
+        case "class": { _tmpArgs pushBack _value; };
+        case "damages": { [_unit, _value] call DEFUNC(utils,applyDamage); };
+        case "face": { _unit setFace _value; };
+        case "fatigue": { _unit setFatigue _value; };
+        case "formationDir": { _unit setFormDir _value; };
+        case "generalDamage": { _unit setDamage _value; };
+        case "group": { [_unit, _value] call _fnc_loadGroupUnits; };
+        case "groupOrders": { [_unit, _value] call _fnc_loadGroupOrders; };
+        case "loadout": { _unit setUnitLoadout _value; };
+        case "name": { [_unit, _value] call _fnc_restoreName; };
+        case "orders": { [_unit, _value] call _fnc_loadOrders; };
+        case "pitch": { _unit setPitch _value; };
+        case "posDir": { [_unit, _value] call DEFUNC(utils,applyPosDir); };
+        case "rating": { [_unit, _value] call _fnc_setRating; };
+        case "side": { _tmpArgs pushBack _value; };
+        case "skills": { [_unit, _value] call _fnc_loadSkills; };
+        case "speaker": { _unit setSpeaker _value; };
+        case "stamina": { _unit setStamina _value; };
+        case "variables": { [_unit, _value] call _fnc_loadVariables; };
+        case "vehicle": { [_unit, _value] call DEFUNC(utils,addUnitToVehicle); };
     };
     true
 } count (_data);

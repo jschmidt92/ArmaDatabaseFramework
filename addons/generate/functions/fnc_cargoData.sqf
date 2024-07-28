@@ -79,7 +79,6 @@ private _magazinesArray = ["magazines", magazinesAmmoCargo _container];
 private _weaponsArray = ["weapons", weaponsItemsCargo _container];
 private _containersArray = ["containers", [_container] call _fnc_getContainersArray];
 private _backpacksArray = ["backpacks", [_container] call _fnc_getBackpacksArray];
-
 private _cargo = [
     _itemsArray,
     _magazinesArray,

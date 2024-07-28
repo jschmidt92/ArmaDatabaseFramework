@@ -7,12 +7,10 @@ class CfgPatches {
         weapons[] = {};
         requiredVersion = REQUIRED_VERSION;
         requiredAddons[] = {};
-        authors[] = {};
+        authors[] = {"J. Schmidt", "NikolaiF90"};
         author = "J. Schmidt";
         VERSION_CONFIG;
     };
 };
 
 #include "CfgMods.hpp"
-#include "CfgMPGameTypes.hpp"
-#include "CfgNotifications.hpp"

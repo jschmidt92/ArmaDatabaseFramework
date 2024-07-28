@@ -88,8 +88,8 @@ private _fnc_addAllContainersToCargo = {
         private _value = _x # 1;
 
         switch (_key) do {
-            case: "class": { _class = _value; };
-            case: "cargo": { _cargo = _value; };
+            case "class": { _class = _value; };
+            case "cargo": { _cargo = _value; };
         };
         
         {
@@ -113,8 +113,8 @@ private _fnc_addAllBackpacksToCargo = {
         private _value = _x # 1;
 
         switch (_key) do {
-            case: "class": { _class = _value; };
-            case: "cargo": { _cargo = _value; };
+            case "class": { _class = _value; };
+            case "cargo": { _cargo = _value; };
         };
 
         _container addBackpackCargo [_class, 1];
@@ -134,11 +134,11 @@ private _fnc_addAllBackpacksToCargo = {
     private _value = _x # 1;
 
     switch (_key) do {
-        case: "containers": { [_container, _value] call _fnc_addAllContainersToCargo; };
-        case: "backpacks": { [_container, _value] call _fnc_addAllBackpacksToCargo; };
-        case: "items": { [_container, _value, { params ["_c", "_n", "_cnt"]; _c addItemCargo [_n, _cnt]; }] call _fnc_addAllToCargo; };
-        case: "magazines": { [_container, _value] call _fnc_addAllMagazinesToCargo; };
-        case: "weapons": { [_container, _value] call _fnc_addAllWeaponsToCargo; };
+        case "containers": { [_container, _value] call _fnc_addAllContainersToCargo; };
+        case "backpacks": { [_container, _value] call _fnc_addAllBackpacksToCargo; };
+        case "items": { [_container, _value, { params ["_c", "_n", "_cnt"]; _c addItemCargo [_n, _cnt]; }] call _fnc_addAllToCargo; };
+        case "magazines": { [_container, _value] call _fnc_addAllMagazinesToCargo; };
+        case "weapons": { [_container, _value] call _fnc_addAllWeaponsToCargo; };
     };
     true
 } count (_cargoArray);

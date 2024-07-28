@@ -9,19 +9,19 @@ class RscPersistentMenu {
 		class RscText_1000: RscText {
 			idc = 1101;
 
-			x = 0.005 * safezoneW + safezoneX;
-			y = 0.00500001 * safezoneH + safezoneY;
-			w = 0.299062 * safezoneW;
-			h = 0.44 * safezoneH;
+			x = "0.005 * safezoneW + safezoneX";
+			y = "0.00500001 * safezoneH + safezoneY";
+			w = "0.299062 * safezoneW";
+			h = "0.44 * safezoneH";
 			colorBackground[] = {0.071,0.239,0.11,1};
 		};
 		class listBox_saveList: RscListBox {
 			idc = 1102;
 
-			x = 0.0153125 * safezoneW + safezoneX;
-			y = 0.071 * safezoneH + safezoneY;
-			w = 0.195937 * safezoneW;
-			h = 0.341 * safezoneH;
+			x = "0.0153125 * safezoneW + safezoneX";
+			y = "0.071 * safezoneH + safezoneY";
+			w = "0.195937 * safezoneW";
+			h = "0.341 * safezoneH";
 			colorBackground[] = {0.235,0.388,0.306,1};
 		};
 		class button_save: RscButton {
@@ -29,10 +29,10 @@ class RscPersistentMenu {
 			action = "[] call adf_db_fnc_saveToSlot";
 
 			text = "Save"; //--- ToDo: Localize;
-			x = 0.216406 * safezoneW + safezoneX;
-			y = 0.071 * safezoneH + safezoneY;
-			w = 0.0721875 * safezoneW;
-			h = 0.033 * safezoneH;
+			x = "0.216406 * safezoneW + safezoneX";
+			y = "0.071 * safezoneH + safezoneY";
+			w = "0.0721875 * safezoneW";
+			h = "0.033 * safezoneH";
 			colorBackground[] = {0.235,0.388,0.306,1};
 			tooltip = "Save progress to selected slot"; //--- ToDo: Localize;
 		};
@@ -41,10 +41,10 @@ class RscPersistentMenu {
 			action = "[] call adf_db_fnc_loadFromSlot";
 
 			text = "Load"; //--- ToDo: Localize;
-			x = 0.216406 * safezoneW + safezoneX;
-			y = 0.115 * safezoneH + safezoneY;
-			w = 0.0721875 * safezoneW;
-			h = 0.033 * safezoneH;
+			x = "0.216406 * safezoneW + safezoneX";
+			y = "0.115 * safezoneH + safezoneY";
+			w = "0.0721875 * safezoneW";
+			h = "0.033 * safezoneH";
 			colorBackground[] = {0.235,0.388,0.306,1};
 			tooltip = "Load progress from selected slot"; //--- ToDo: Localize;
 		};
@@ -53,10 +53,10 @@ class RscPersistentMenu {
 			action = "[] call adf_db_fnc_deleteSlot";
 
 			text = "Delete"; //--- ToDo: Localize;
-			x = 0.216406 * safezoneW + safezoneX;
-			y = 0.379 * safezoneH + safezoneY;
-			w = 0.0721875 * safezoneW;
-			h = 0.033 * safezoneH;
+			x = "0.216406 * safezoneW + safezoneX";
+			y = "0.379 * safezoneH + safezoneY";
+			w = "0.0721875 * safezoneW";
+			h = "0.033 * safezoneH";
 			colorBackground[] = {0.569,0.059,0.059,1};
 			tooltip = "Delete selected slot"; //--- ToDo: Localize;
 		};
@@ -64,10 +64,10 @@ class RscPersistentMenu {
 			idc = 1106;
 
 			text = "Scenario Name"; //--- ToDo: Localize;
-			x = 0.0153125 * safezoneW + safezoneX;
-			y = 0.027 * safezoneH + safezoneY;
-			w = 0.273281 * safezoneW;
-			h = 0.033 * safezoneH;
+			x = "0.0153125 * safezoneW + safezoneX";
+			y = "0.027 * safezoneH + safezoneY";
+			w = "0.273281 * safezoneW";
+			h = "0.033 * safezoneH";
 			colorBackground[] = {0.235,0.388,0.306,1};
 		};
 		class button_saveVehicle: RscButton {
@@ -75,10 +75,10 @@ class RscPersistentMenu {
 			action = "[0] call adf_db_fnc_saveTarget";
 
 			text = "Save Vehicle"; //--- ToDo: Localize;
-			x = 0.216406 * safezoneW + safezoneX;
-			y = 0.159 * safezoneH + safezoneY;
-			w = 0.0721875 * safezoneW;
-			h = 0.033 * safezoneH;
+			x = "0.216406 * safezoneW + safezoneX";
+			y = "0.159 * safezoneH + safezoneY";
+			w = "0.0721875 * safezoneW";
+			h = "0.033 * safezoneH";
 			colorBackground[] = {0.141,0.38,0.184,1};
 			tooltip = "Save the vehicle you're looking at"; //--- ToDo: Localize;
 		};
@@ -87,10 +87,10 @@ class RscPersistentMenu {
 			action = "[1] call adf_db_fnc_saveTarget";
 
 			text = "Save Container"; //--- ToDo: Localize;
-			x = 0.216406 * safezoneW + safezoneX;
-			y = 0.203 * safezoneH + safezoneY;
-			w = 0.0721875 * safezoneW;
-			h = 0.033 * safezoneH;
+			x = "0.216406 * safezoneW + safezoneX";
+			y = "0.203 * safezoneH + safezoneY";
+			w = "0.0721875 * safezoneW";
+			h = "0.033 * safezoneH";
 			colorBackground[] = {0.141,0.38,0.184,1};
 			tooltip = "Caution! Must point at container first."; //--- ToDo: Localize;
 		};

@@ -7,7 +7,7 @@ class CfgPatches {
         weapons[] = {};
         requiredVersion = REQUIRED_VERSION;
         requiredAddons[] = {"adf_main"};
-        authors[] = {};
+        authors[] = {"J. Schmidt", "NikolaiF90"};
         author = "J. Schmidt";
         VERSION_CONFIG;
     };

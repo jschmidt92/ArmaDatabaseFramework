@@ -144,27 +144,27 @@ private _fnc_setRating = {
     private _value = _x # 1;
 
     switch (_key) do {
-        case: "assignedTeam": { _team = _value; };
-        case: "class": { _tmpArgs pushBack _value; };
-        case: "damages": { _damages = _value; };
-        case: "face": { _face = _value; };
-        case: "fatigue": { _fatigue = _value; };
-        case: "formationDir": { _formDir = _value; };
-        case: "generalDamage": { _generalDamage = _value; };
-        case: "group": { _group = _value; };
-        case: "groupOrders": { _groupOrders = _value; };
-        case: "loadout": { _loadout = _value; };
-        case: "orders": { _orders = _value; };
-        case: "name": { _name = _value; };
-        case: "pitch": { _pitch = _value; };
-        case: "posDir": { _posDir = _value; };
-        case: "rating": { _rating = _value; };
-        case: "side": { _tmpArgs pushBack _value; };
-        case: "skills": { _skills = _value; };
-        case: "speaker": { _speaker = _value; };
-        case: "stamina": { _stamina = _value; };
-        case: "variables": { _variables = _value; };
-        case: "vehicle": { _vehicle = _value; };
+        case "assignedTeam": { _team = _value; };
+        case "class": { _tmpArgs pushBack _value; };
+        case "damages": { _damages = _value; };
+        case "face": { _face = _value; };
+        case "fatigue": { _fatigue = _value; };
+        case "formationDir": { _formDir = _value; };
+        case "generalDamage": { _generalDamage = _value; };
+        case "group": { _group = _value; };
+        case "groupOrders": { _groupOrders = _value; };
+        case "loadout": { _loadout = _value; };
+        case "orders": { _orders = _value; };
+        case "name": { _name = _value; };
+        case "pitch": { _pitch = _value; };
+        case "posDir": { _posDir = _value; };
+        case "rating": { _rating = _value; };
+        case "side": { _tmpArgs pushBack _value; };
+        case "skills": { _skills = _value; };
+        case "speaker": { _speaker = _value; };
+        case "stamina": { _stamina = _value; };
+        case "variables": { _variables = _value; };
+        case "vehicle": { _vehicle = _value; };
     };
     true
 } count (_data);

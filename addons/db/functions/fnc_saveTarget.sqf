@@ -48,7 +48,7 @@ switch { _typeOfTarget } do {
         [_objectToSave, EGVAR(db,conts)] call DFUNC(makePersistent);
         [EGVAR(db,debug), "adf_db_fnc_saveTarget", text format ["Container '%1' is now persistent", _cursorTarget], true] call DEFUNC(utils,debug);
     };
-    default: {
+    default {
         if (_cursorTarget isKindOf "Air" || _cursorTarget isKindOf "LandVehicle" || _cursorTarget isKindOf "Ship") then {
             _objectToSave = _cursorTarget;
             [_objectToSave] call DEFUNC(generate,vehicleID);
