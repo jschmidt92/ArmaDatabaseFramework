@@ -3,12 +3,12 @@ class CfgMods {
         dir = "@adf";
         name = "Arma Database Framework";
         author = "J. Schmidt";
-        picture = "title_co.paa";
+        picture = "";
         hideName = "false";
         hidePicture = "false";
         action  = "";
         actionName = "Website";
-        description = "It's unclear where this will show";
+        description = "Arma Database Framework";
         dlcColor[] = {0.45, 0.47, 0.41, 1};
     };
 };
