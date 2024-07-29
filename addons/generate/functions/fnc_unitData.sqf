@@ -69,7 +69,7 @@ private _fnc_generateVariables = {
     {
         private _splittedKey = _x splitString '_';
 
-        if (_splittedKey # 0 != 'cba') then {
+        if (_splittedKey # 0 != 'cba' && _splittedKey # 0 != 'ace') then {
             _varsArray pushBack [_x, _unit getVariable _x];
         };
         true

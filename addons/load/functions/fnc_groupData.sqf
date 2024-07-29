@@ -56,7 +56,6 @@ private _stamina = 0;
 private _surname = "";
 private _team = "";
 private _tmpArgs = [];
-private _unit = objNull;
 private _variables = [];
 private _vehicle = [];
 
@@ -126,6 +125,25 @@ private _fnc_loadSkills = {
     } count (_skillsArray);
 };
 
+private _fnc_restoreName = {
+    params ["_unit", "_nameArray"];
+    
+    private _firstName = "";
+    private _surname = "";
+    private _joinedNames = "";
+    
+    if (count _nameArray == 1) then {
+        _surname = _nameArray # 0;
+        _joinedNames = _surname;
+    } else {
+        _firstName = _nameArray # 0;
+        _surname = _nameArray # 1;
+        _joinedNames = format ["%1 %2", _firstName, _surname];
+    };
+    
+    _unit setName [_joinedNames, _firstName, _surname];
+};
+
 private _fnc_setRating = {
     params ["_unit", "_rating"];
 
@@ -137,8 +155,8 @@ private _fnc_setRating = {
 };
 
 {
-    private _key = _x;
-    private _value = _y;
+    private _key = _x # 0;
+    private _value = _x # 1;
 
     switch (_key) do {
         case "assignedTeam": { _team = _value; };
@@ -165,7 +183,9 @@ private _fnc_setRating = {
     };
 } forEach _groupData;
 
-private _unit = (createGroup _side) createUnit [_class, [0,0,0], [], 0, "FORM"];
+private _unit = (createGroup _side) createUnit [_class, [0, 0, 0], [], 0, "FORM"];
+
+diag_log text format ["Unit created: '%1'", _unit];
 
 [EGVAR(db,debug), "adf_load_fnc_unitData", format ["Loading unit group data for '%1'.", _unit], false] call DEFUNC(utils,debug);
 
@@ -174,6 +194,7 @@ _unit setVariable ["BIS_enableRandomization", false];
 [_unit] joinSilent _leader;
 
 [_unit, _groupOrders] call _fnc_loadGroupOrders;
+[_unit, _name] call  _fnc_restoreName;
 [_unit, _orders] call _fnc_loadOrders;
 [_unit, _rating] call _fnc_setRating;
 [_unit, _skills] call _fnc_loadSkills;
@@ -184,50 +205,19 @@ _unit setVariable ["BIS_enableRandomization", false];
 [_unit, _posDir] call DEFUNC(utils,applyPosDir);
 [_unit, _vehicle] call DEFUNC(utils,addUnitToVehicle);
 
+diag_log text format ["Unit position set: '%1'", getPos _unit];
+
 _unit assignTeam _team;
 _unit setDamage _generalDamage;
 _unit setFatigue _fatigue;
 _unit setFormDir _formDir;
 _unit setStamina _stamina;
-
-private _unitData = [_face, _loadout, _name, _pitch, _speaker];
-
-[_unit, _unitData] spawn {
-    params ["_unit", "_unitData"];
-
-    private _face = _unitData # 0;
-    private _loadout = _unitData # 1;
-    private _name = _unitData # 2;
-    private _pitch = _unitData # 3;
-    private _speaker = _unitData # 4;
-
-    private _fnc_restoreUnitsName = {
-        params ["_unit", "_nameArray"];
-        
-        private _firstName = "";
-        private _surname = "";
-        private _joinedNames = "";
-        
-        if (count _nameArray == 1) then {
-            _surname = _nameArray # 0;
-            _joinedNames = _surname;
-        } else {
-            _firstName = _nameArray # 0;
-            _surname = _nameArray # 1;
-            _joinedNames = format ["%1 %2", _firstName, _surname];
-        };
-        
-        _unit setName [_joinedNames, _firstName, _surname];
-    };
-
-    [_unit, _name] call  _fnc_restoreUnitsName;
-    
-    _unit setFace _face;
-    _unit setPitch _pitch;
-    _unit setSpeaker _speaker;
-    _unit setUnitLoadout _loadout;
-};
-
+_unit setFace _face;
+_unit setPitch _pitch;
+_unit setSpeaker _speaker;
+_unit setUnitLoadout _loadout;
 _unit;
+
+diag_log text format ["Final unit state: '%1', Position: '%2'", _unit, getPos _unit];
 
 [EGVAR(db,debug), "adf_load_fnc_unitData", "Unit group data loaded.", false] call DEFUNC(utils,debug);
