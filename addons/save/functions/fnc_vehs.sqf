@@ -53,7 +53,7 @@ private _fnc_generateTurretArray = {
     _vehicleArray pushBack ["damages", getAllHitPointsDamage _vehicle];
     _vehicleArray pushBack ["fuel", fuel _vehicle];
     _vehicleArray pushBack ["generalDamage", damage _vehicle];
-    _vehicleArray pushBack ["id", _vehicle getVariable EGVAR(db,vehIDKey)];
+    _vehicleArray pushBack ["key", _vehicle getVariable QEGVAR(db,vehIDKey)];
     _vehicleArray pushBack ["materials", getObjectMaterials _vehicle];
     _vehicleArray pushBack ["posDir", [_vehicle] call DEFUNC(utils,applyPosDir)];
     _vehicleArray pushBack ["textures", getObjectTextures _vehicle];
@@ -65,4 +65,4 @@ private _fnc_generateTurretArray = {
 
 ["vehicles", _vehicles, _slot] call DEFUNC(core,saveData);
 
-[EGVAR(db,debug), "adf_save_fnc_vehs", text format ["Vehicles saved to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_save_fnc_vehs", format ["Vehicles saved to slot '%1'.", _slot], false] call DEFUNC(utils,debug);

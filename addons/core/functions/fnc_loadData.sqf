@@ -13,7 +13,7 @@
  * PO Box 1866, Mountain View, CA 94042
  *
  * [Description]
- * Save data in profileNamespace using specified key, value, and slot.
+ * Save data in missionProfileNamespace using specified key, value, and slot.
  *
  * Arguments:
  * 0: Name of key <STRING|ARRAY> (default: "")
@@ -31,20 +31,20 @@
  * Public: Yes
  */
 
-params [["_key", "", [""]], ["_slot", 0, [0]]];
+params [["_key", "", [[], ""]], ["_slot", 0, [0]]];
 
-private ["_result", "_return", "_value"];
+private _return = [];
 
 if (_key isEqualType "") then {
-    _result = format ["%1.%2.%3", EGVAR(db,prefix), _slot, _key];
+    private _result = format ["%1.%2.%3", EGVAR(db,prefix), _slot, _key];
     _return = missionProfileNamespace getVariable _result;
 };
 
 if (_key isEqualType []) then {
-    _result = format ["%1.%2.%3", EGVAR(db,prefix), _slot, _key # 0];
+    private _result = format ["%1.%2.%3", EGVAR(db,prefix), _slot, _key # 0];
     _return = missionProfileNamespace getVariable [_result, _key # 1];
 };
 
-[EGVAR(db,debug), "adf_core_fnc_loadData", text format ["Key loaded '%1'.", _key], true] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_core_fnc_loadData", format ["Key loaded '%1'.", _key], true] call DEFUNC(utils,debug);
 
 _return;

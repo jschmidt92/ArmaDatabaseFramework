@@ -29,10 +29,12 @@
 
 params [["_leader", nil, [objNull, 0, [], sideUnknown, grpNull, ""]]];
 
+if (isNil "_leader" || isNull _leader) exitWith {[EGVAR(db,debug), "adf_generate_fnc_groupData", "No entity to generate group data for.", true] call DEFUNC(utils,debug); };
+
 private _groupArray = units group _leader;
 private _unitsData = [];
 
-[EGVAR(db,debug), "adf_generate_fnc_groupData", text format ["Generating group data for leader '%1'...", _leader], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_generate_fnc_groupData", format ["Generating group data for leader '%1'...", _leader], false] call DEFUNC(utils,debug);
 
 {
     if (_x != _leader && alive _x) then {
@@ -41,5 +43,5 @@ private _unitsData = [];
     true
 } count (_groupArray);
 
-[EGVAR(db,debug), "adf_generate_fnc_groupData", text format ["Group data for leader '%1' has been successfully generated.", _leader], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_generate_fnc_groupData", format ["Group data for leader '%1' has been successfully generated.", _leader], false] call DEFUNC(utils,debug);
 _unitsData;

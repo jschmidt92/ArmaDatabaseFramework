@@ -28,7 +28,7 @@
  */
 
 EGVAR(db,debug) = true;
-[EGVAR(db,debug), "adf_db_fnc_config", text format ["Configuring '%1'...", Scenario_Name], true] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_db_fnc_config", format ["Configuring '%1'...", Scenario_Name], true] call DEFUNC(utils,debug);
 
 EGVAR(db,host) = player;
 EGVAR(db,prefix) = "ADF_ARMADBCORE";
@@ -38,7 +38,7 @@ EGVAR(db,slots) = [];
 EGVAR(db,vars) = [];
 EGVAR(db,vehs) = [];
 
-[EGVAR(db,debug), "adf_db_fnc_config", text format ["Setting global variables '%1'... Host: '%2', Prefix: '%3', Save Interval: '%4', Vehicles: '%5', Containers: '%6' and Variables: '%7'", Scenario_Name, EGVAR(db,host), EGVAR(db,prefix), EGVAR(db,saveInterval), EGVAR(db,vehs), EGVAR(db,conts), EGVAR(db,vars)], true] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_db_fnc_config", format ["Setting global variables '%1'... Host: '%2', Prefix: '%3', Save Interval: '%4', Vehicles: '%5', Containers: '%6' and Variables: '%7'", Scenario_Name, EGVAR(db,host), EGVAR(db,prefix), EGVAR(db,saveInterval), EGVAR(db,vehs), EGVAR(db,conts), EGVAR(db,vars)], true] call DEFUNC(utils,debug);
 
 EGVAR(db,configDone) = true;
-[EGVAR(db,debug), "adf_db_fnc_config", text format ["Finished configuring '%1'.", Scenario_Name], true] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_db_fnc_config", format ["Finished configuring '%1'.", Scenario_Name], true] call DEFUNC(utils,debug);

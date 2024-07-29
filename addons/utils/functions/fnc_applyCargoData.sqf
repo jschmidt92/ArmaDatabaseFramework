@@ -30,7 +30,7 @@
 
 params [["_container", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_cargoArray", [], [[]]]];
 
-private ["_cargo", "_class"];
+if (isNil "_container" || _cargoArray isEqualTo []) exitWith { [EGVAR(db,debug), "adf_utils_fnc_applyCargoData", "No container to add cargo to.", true] call DEFUNC(utils,debug); };
 
 clearItemCargo _container;
 clearMagazineCargo _container;
@@ -88,8 +88,8 @@ private _fnc_addAllContainersToCargo = {
         private _value = _x # 1;
 
         switch (_key) do {
-            case "class": { _class = _value; };
-            case "cargo": { _cargo = _value; };
+            case "class": { private _class = _value; };
+            case "cargo": { private _cargo = _value; };
         };
         
         {

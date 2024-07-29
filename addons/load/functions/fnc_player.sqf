@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 
 /*
- * Function: adf_load_fnc_entity
+ * Function: adf_load_fnc_player
  * Author: NikolaiF90, J.Schmidt
  * Edit: 07.27.2024
  * Copyright © 2024 NikolaiF90, J.Schmidt, All rights reserved
@@ -22,14 +22,14 @@
  * N/A
  *
  * Examples:
- * [1] call adf_load_fnc_entity
+ * [1] call adf_load_fnc_player
  *
  * Public: Yes
  */
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_load_fnc_entity", text format ["Loading player data from slot '%1'.", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_load_fnc_player", format ["Loading player data from slot '%1'.", _slot], false] call DEFUNC(utils,debug);
 
 private _unitData = ["player", _slot] call DEFUNC(core,loadData);
 [player, _unitData, objNull] call DFUNC(unitData);

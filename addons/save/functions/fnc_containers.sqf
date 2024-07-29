@@ -29,7 +29,7 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_save_fnc_containers", text format ["Saving containers to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_save_fnc_containers", format ["Saving containers to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
 
 private _containers = [];
 

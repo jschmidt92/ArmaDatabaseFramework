@@ -29,21 +29,25 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_load_fnc_variables", text format ["Loading all variables from slot '%1'...", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_load_fnc_variables", format ["Loading all variables from slot '%1'...", _slot], false] call DEFUNC(utils,debug);
 
 private _allVariables = ["variables", _slot] call DEFUNC(core,loadData);
+
+if (isNil "_allVariables" || (count _allVariables) == 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_variables", format ["No variables to load from slot '%1'", _slot], false] call DEFUNC(utils,debug); };
 
 [EGVAR(db,vars)] call DEFUNC(utils,clearArray);
 
 {
-	private _namespace = _x # 0;
-    private _key = _x # 1;
-	private _value = _x # 2;
+	private _namespace = _x;
+	private _nameValuePairs = _y;
 
-	[_namespace, _key, _value] call DEFUNC(save,toNamespace);
+	{
+		private _key = _x;
+		private _value = _y;
 
-	EGVAR(db,vars) pushBack [_namespace, _key];
-    true
-} count (_allVariables);
+		[_namespace, _key, _value] call DEFUNC(save,toNamespace);
+		EGVAR(db,vars) pushBack [_key, _value];
+	} forEach _nameValuePairs;
+} forEach _allVariables;
 
-[EGVAR(db,debug), "adf_load_fnc_variables", "All variables has been successfully loaded.", false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_load_fnc_variables", "All variables loaded.", false] call DEFUNC(utils,debug);

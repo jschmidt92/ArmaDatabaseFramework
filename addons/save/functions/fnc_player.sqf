@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 
 /*
- * Function: adf_save_fnc_entity
+ * Function: adf_save_fnc_player
  * Author: NikolaiF90, J.Schmidt
  * Edit: 07.27.2024
  * Copyright © 2024 NikolaiF90, J.Schmidt, All rights reserved
@@ -22,14 +22,14 @@
  * N/A
  *
  * Examples:
- * [1] call adf_save_fnc_entity
+ * [1] call adf_save_fnc_player
  *
  * Public: Yes
  */
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_save_fnc_entity", text format ["Saving player data to slot '%1'", _slot], true] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_save_fnc_player", format ["Saving player data to slot '%1'", _slot], true] call DEFUNC(utils,debug);
 
 private _playerData = [player, true] call DEFUNC(generate,unitData);
 ["player", _playerData, _slot] call DEFUNC(core,saveData);

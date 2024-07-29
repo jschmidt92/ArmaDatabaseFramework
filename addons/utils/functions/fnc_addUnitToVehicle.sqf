@@ -30,19 +30,19 @@
 
 params [["_unit", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_vehicleData", nil, [[]]]];
 
-private ["_roleArray", "_vehicleAssignmentId"];
+if (isNil "_unit" || _vehicleData isEqualTo []) exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", "No unit to assign role in vehicle", false] call DFUNC(debug); };
 
-[EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", text format ["Adding '%1' to a vehicle..."], false] call DFUNC(debug);
+[EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["Adding '%1' to a vehicle..."], false] call DFUNC(debug);
 
-if (isNil "_vehicleData") exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", text format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
-if !(_vehicleData isEqualType []) exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", text format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
+if (isNil "_vehicleData") exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
+if !(_vehicleData isEqualType []) exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
 
 private _fnc_FindAssignedVehicleInArray = {
 	params ["_id"];
 	private _instance = objNull;
 
 	{
-		if (_x getVariable EGVAR(db,vehIDKey) == _id) exitWith { _instance = _x };
+		if (_x getVariable QEGVAR(db,vehIDKey) == _id) exitWith { _instance = _x };
 		true
 	} count (EGVAR(db,vehs));
 
@@ -54,8 +54,8 @@ private _fnc_FindAssignedVehicleInArray = {
     private _value = _x # 1;
 
     switch (_key) do {
-        case "id": { _vehicleAssignmentId = _value };
-        case "role": { _roleArray = _value };
+        case "key": { private _vehicleAssignmentId = _value };
+        case "role": { private _roleArray = _value };
     };
     true
 } count (_vehicleData);

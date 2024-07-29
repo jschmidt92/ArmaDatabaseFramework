@@ -29,7 +29,7 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_save_fnc_environment", text format ["Saving environment info to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_save_fnc_environment", format ["Saving environment info to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
 
 private _environment = [];
 

@@ -29,7 +29,7 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_save_fnc_variables", text format ["Saving all variables to slot '%1'...", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_save_fnc_variables", format ["Saving all variables to slot '%1'...", _slot], false] call DEFUNC(utils,debug);
 
 private _allVariables = [];
 
@@ -38,8 +38,8 @@ private _allVariables = [];
 	private _name = _x # 1;
 	private _value = [_namespace, _name] call DEFUNC(load,fromNamespace);
 
-    _allVariables pushBack [_namespace, _name, _value];
-    true
+	_allVariables pushBack [_namespace, _name, _value];
+	true
 } count (EGVAR(db,vars));
 
 ["variables", _allVariables, _slot] call DEFUNC(core,saveData);

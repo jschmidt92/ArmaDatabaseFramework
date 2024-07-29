@@ -29,13 +29,22 @@
 
 params [["_slot", 0, [0]]];
 
-private ["_cargo", "_class", "_damages", "_fuel", "_generalDamage", "_id", "_materialData", "_posDir", "_textureData", "_turretData"];
+private _cargo = [];
+private _class = "";
+private _damages = [];
+private _fuel = 0;
+private _generalDamage = 0;
+private _id = 0;
+private _materialData = [];
+private _posDir = [];
+private _textureData = [];
+private _turretData = [];
 
-[EGVAR(db,debug), "adf_load_fnc_vehs", text format ["Loading persistent vehicles from slot '%1'", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_load_fnc_vehs", format ["Loading persistent vehicles from slot '%1'", _slot], false] call DEFUNC(utils,debug);
 
 private _vehicles = ["vehicles", _slot] call DEFUNC(core,loadData);
 
-if (isNil "_vehicles") exitWith { [EGVAR(db,debug), "adf_load_fnc_vehs", text format ["No vehicles to load from slot '%1'", _slot], false] call DEFUNC(utils,debug); };
+if (isNil "_vehicles" || (count _vehicles) == 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_vehs", format ["No vehicles to load from slot '%1'", _slot], false] call DEFUNC(utils,debug); };
 if (count EGVAR(db,vehs) > 0) then {
     {
         deleteVehicle _x;
@@ -47,8 +56,8 @@ if (count EGVAR(db,vehs) > 0) then {
 };
 
 {
-    private _key = _x # 0;
-    private _value = _x # 1;
+    private _key = _x;
+    private _value = _y;
 
     switch (_key) do {
         case "cargo": { _cargo = _value; };
@@ -56,7 +65,7 @@ if (count EGVAR(db,vehs) > 0) then {
         case "damages": { _damages = _value; };
         case "fuel": { _fuel = _value; };
         case "generalDamage": { _generalDamage = _value; };
-        case "id": { _id = _value; };
+        case "key": { _id = _value; };
         case "materials": { _materialData = _value; };
         case "posDir": { _posDir = _value; };
         case "textures": { _textureData = _value; };
@@ -100,8 +109,9 @@ if (count EGVAR(db,vehs) > 0) then {
         true
     } count (_textureData);
 
-    _vehicle setVariable [EGVAR(db,vehIDKey), _id];
+    _vehicle setVariable [QEGVAR(db,vehIDKey), _id];
     
     EGVAR(db,vehs) set [_id, _vehicle];
-    true
-} count (_vehicles);
+} forEach _vehicles;
+
+[EGVAR(db,debug), "adf_load_fnc_vehs", "Persistent vehicles loaded.", false] call DEFUNC(utils,debug);

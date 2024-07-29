@@ -29,12 +29,12 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_load_fnc_game", text format ["Loading progress from slot '%1'...", _slot], true] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_load_fnc_game", format ["Loading progress from slot '%1'...", _slot], true] call DEFUNC(utils,debug);
 
 [_slot] call DEFUNC(utils,clearGarbage);
 
 [_slot] call DFUNC(containers);
-[_slot] call DFUNC(entity);
+[_slot] call DFUNC(player);
 [_slot] call DFUNC(environment);
 [_slot] call DFUNC(mapMarkers);
 [_slot] call DFUNC(variables);

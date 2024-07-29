@@ -29,7 +29,7 @@
 
 params [["_listID", -1, [0]]];
 
-if !(_listID > -1) exitWith { [EGVAR(db,debug), "adf_db_fnc_updatePersistentList", text format ["Invalid input for listID '%1'.", _listID], false] call DEFUNC(utils,debug); };
+if !(_listID > -1) exitWith { [EGVAR(db,debug), "adf_db_fnc_updatePersistentList", format ["Invalid input for listID '%1'.", _listID], false] call DEFUNC(utils,debug); };
 
 [EGVAR(db,debug), "adf_db_fnc_updatePersistentList", "Updating persistent slots...", true] call DEFUNC(utils,debug);
 

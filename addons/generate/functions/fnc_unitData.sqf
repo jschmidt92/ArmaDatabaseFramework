@@ -30,9 +30,11 @@
 
 params [["_unit", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_isLeader", false, [false]]];
 
+if (isNil "_unit" || isNull _unit) exitWith {[EGVAR(db,debug), "adf_generate_fnc_unitData", "No unit to generate data for.", true] call DEFUNC(utils,debug); };
+
 private _unitData = [];
 
-[EGVAR(db,debug), "adf_generate_fnc_unitData", text format ["Generating data for '%1' (isLeader = '%2')...", _unit, _isLeader], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_generate_fnc_unitData", format ["Generating data for '%1' (isLeader = '%2')...", _unit, _isLeader], false] call DEFUNC(utils,debug);
 
 private _fnc_generateOrders = {
     params ["_unit"];
@@ -104,13 +106,13 @@ _unitData pushBack ["class", typeOf _unit];
 _unitData pushBack ["damages", getAllHitPointsDamage _unit];
 _unitData pushBack ["face", face _unit];
 _unitData pushBack ["fatigue", getFatigue _unit];
-_unitData pushBack ["formationDir", formationDirection _unit];
+_unitData pushBack ["formDir", formationDirection _unit];
 _unitData pushBack ["generalDamage", damage _unit];
 _unitData pushBack ["loadout", getUnitLoadout _unit];
 _unitData pushBack ["name", (name _unit) splitString " "];
 _unitData pushBack ["orders", [_unit] call _fnc_generateOrders];
 _unitData pushBack ["pitch", pitch _unit];
-_unitData pushBack ["posDir", [_unit] call DEFUNC(utils,applyPosDir)];
+_unitData pushBack ["posDir", [_unit] call DFUNC(posDirData)];
 _unitData pushBack ["rating", rating _unit];
 _unitData pushBack ["side", side _unit];
 _unitData pushBack ["skills", [_unit] call _fnc_generateSkills];
@@ -132,12 +134,12 @@ if (vehicle _unit != _unit) then {
             private _turretPath = _x # 3;
             private _personTurret = _x # 4;
             _roleData = [_role, _cargoIndex, _turretPath, _personTurret];
-            [EGVAR(db,debug), "adf_generate_fnc_unitData", text format ["Role data for '%1' generated: '%2'", _unit, _roleData], false] call DEFUNC(utils,debug);
+            [EGVAR(db,debug), "adf_generate_fnc_unitData", format ["Role data for '%1' generated: '%2'", _unit, _roleData], false] call DEFUNC(utils,debug);
         };
         true
     } count (_vehicleCrew);
 
-    _vehicleData pushBack ["id", [_vehicle] call DFUNC(vehicleID)];
+    _vehicleData pushBack ["key", [_vehicle] call DFUNC(vehicleID)];
     _vehicleData pushBack ["role", _roleData];
 
     _unitData pushBack ["vehicle", _vehicleData];
@@ -148,5 +150,5 @@ if (_isLeader) then {
     _unitData pushBack ["groupOrders", [_unit] call _fnc_generateGroupOrders];
 };
 
-[EGVAR(db,debug), "adf_generate_fnc_unitData", text format ["Data for '%1' (isLeader = '%2') has been successfully generated.", _unit, _isLeader], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_generate_fnc_unitData", format ["Data for '%1' (isLeader = '%2') has been successfully generated.", _unit, _isLeader], false] call DEFUNC(utils,debug);
 _unitData;

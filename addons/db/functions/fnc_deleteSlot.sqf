@@ -13,7 +13,7 @@
  * PO Box 1866, Mountain View, CA 94042
  *
  * [Description]
- * Delete selected item from a persistent list and update profileNamespace.
+ * Delete selected item from a persistent list and update missionProfileNamespace.
  *
  * Arguments:
  * N/A
@@ -31,7 +31,7 @@ EGVAR(db,selectedList) = [EGVAR(db,listBox)] call DFUNC(getSelectedList);
 
 if (EGVAR(db,selectedList) != 0) then {
     private _deletedItem = EGVAR(db,slots) deleteAt EGVAR(db,selectedList);
-    [EGVAR(db,debug), "adf_db_fnc_deleteSlot", text format ["Deleted '%1' from persistent list.", _deletedItem], false] call DEFUNC(utils,debug);
+    [EGVAR(db,debug), "adf_db_fnc_deleteSlot", format ["Deleted %1 from persistent list.", _deletedItem], false] call DEFUNC(utils,debug);
 
     profileNamespace setVariable [QEGVAR(db,pListKey), EGVAR(db,slots)];
     [EGVAR(db,listBox)] call DFUNC(updatePersistentList);

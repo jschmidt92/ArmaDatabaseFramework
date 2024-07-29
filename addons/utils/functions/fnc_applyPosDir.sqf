@@ -30,6 +30,8 @@
 
 params [["_entity", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_array", [], [[]]]];
 
+if (isNil "_entity" || _array isEqualTo []) exitWith { [EGVAR(db,debug), "adf_utils_fnc_applyPosDir", "No entity to apply position and direction to.", true] call DEFUNC(utils,debug); };
+
 private _posATL = _array # 0;
 private _dir = _array # 1;
 

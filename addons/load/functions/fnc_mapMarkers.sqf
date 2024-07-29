@@ -29,9 +29,19 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_load_fnc_mapMarkers", text format ["Loading map markers from slot '%1'...", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_load_fnc_mapMarkers", format ["Loading map markers from slot '%1'...", _slot], false] call DEFUNC(utils,debug);
 
 private _allMarkers = allMapMarkers;
+private _alpha = 0;
+private _brush = "";
+private _color = "";
+private _dir = 0;
+private _name = "";
+private _position = [0,0,0];
+private _shape = "";
+private _size = [];
+private _text = "";
+private _type = "";
 
 {
     deleteMarker _x;
@@ -40,9 +50,11 @@ private _allMarkers = allMapMarkers;
 
 private _markers = ["markers", _slot] call DEFUNC(core,loadData);
 
+if (isNil "_markers" || (count _markers) == 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_mapMarkers", format ["No markers to load from slot '%1'.", _slot], true] call DEFUNC(utils,debug); };
+
 {
-    private _key =  _x # 0;
-    private _value = _x # 1;
+    private _key =  _x;
+    private _value = _y;
     
     switch (_key) do {
         case "alpha": { _alpha = _value; };
@@ -67,7 +79,6 @@ private _markers = ["markers", _slot] call DEFUNC(core,loadData);
     _marker setMarkerSize _size;
     _marker setMarkerText _text;
     _marker setMarkerType _type;
-    true
-} count (_markers);
+} forEach _markers;
 
 [EGVAR(db,debug), "adf_load_fnc_mapMarkers", "Map markers loaded.", false] call DEFUNC(utils,debug);

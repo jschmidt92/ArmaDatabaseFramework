@@ -32,7 +32,7 @@ EGVAR(db,selectedList) = [EGVAR(db,listBox)] call DFUNC(getSelectedList);
 [EGVAR(db,debug), "adf_db_fnc_saveToSlot", "Generating save...", false] call DEFUNC(utils,debug);
 
 private _saveDate = [] call DEFUNC(generate,dateData);
-private _saveName = text format ["'%1' saved on, '%2'", Scenario_Name, _saveDate];
+private _saveName = format ["'%1' saved on, '%2'", Scenario_Name, _saveDate];
 private _saveSlot = 0;
 
 if (EGVAR(db,selectedList) == 0) then {
@@ -40,7 +40,7 @@ if (EGVAR(db,selectedList) == 0) then {
     EGVAR(db,slots) pushBack _saveName;
     _saveSlot = (count EGVAR(db,slots)) -1;
 } else {
-    [EGVAR(db,debug), "adf_db_fnc_saveToSlot", text format ["Saving to slot '%1'", EGVAR(db,selectedList)], false] call DEFUNC(utils,debug);
+    [EGVAR(db,debug), "adf_db_fnc_saveToSlot", format ["Saving to slot '%1'", EGVAR(db,selectedList)], false] call DEFUNC(utils,debug);
     EGVAR(db,slots) set [EGVAR(db,selectedList), _saveName];
     _saveSlot = EGVAR(db,selectedList);
 };
@@ -48,7 +48,7 @@ if (EGVAR(db,selectedList) == 0) then {
 [EGVAR(db,debug), "adf_db_fnc_saveToSlot", "Now saving...", false] call DEFUNC(utils,debug);
 [_saveSlot] call DEFUNC(save,game);
 
-profileNamespace setVariable [EGVAR(db,pListKey), EGVAR(db,slots)];
+profileNamespace setVariable [QEGVAR(db,pListKey), EGVAR(db,slots)];
 
 [EGVAR(db,debug), "adf_db_fnc_saveToSlot", "Progress saved.", false] call DEFUNC(utils,debug);
 [EGVAR(db,listBox)] call DFUNC(updatePersistentList);

@@ -29,12 +29,12 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_save_fnc_game", text format ["Saving progress to slot '%1'...", _slot], true] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_save_fnc_game", format ["Saving progress to slot '%1'...", _slot], true] call DEFUNC(utils,debug);
 
 [_slot] call DEFUNC(core,clearSave);
 
 [_slot] call DFUNC(containers);
-[_slot] call DFUNC(entity);
+[_slot] call DFUNC(player);
 [_slot] call DFUNC(environment);
 [_slot] call DFUNC(mapMarkers);
 [_slot] call DFUNC(variables);

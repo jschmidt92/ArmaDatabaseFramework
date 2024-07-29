@@ -29,6 +29,8 @@
 
 params [["_container", nil, [objNull, 0, [], sideUnknown, grpNull, ""]]];
 
+if (isNil "_container" || isNull _container) exitWith {[EGVAR(db,debug), "adf_generate_fnc_cargoData", "No entity to generate cargo data for.", true] call DEFUNC(utils,debug); };
+
 private _fnc_getContainersArray = {
     params ["_container"];
 
@@ -72,7 +74,7 @@ private _fnc_getBackpacksArray = {
     _backpacksArray;
 };
 
-[EGVAR(db,debug), "adf_generate_fnc_cargoData", text format ["Generating cargo data for container '%1'.", _container], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_generate_fnc_cargoData", format ["Generating cargo data for container '%1'.", _container], false] call DEFUNC(utils,debug);
 
 private _itemsArray = ["items", getItemCargo _container];
 private _magazinesArray = ["magazines", magazinesAmmoCargo _container];

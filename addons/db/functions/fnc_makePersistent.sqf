@@ -28,15 +28,17 @@
  * Public: Yes
  */
 
-params [["_object", nil, [objNull]], ["_array", [], [[]]]];
+params [["_object", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_array", [], [[]]]];
 
-[EGVAR(db,debug), "adf_db_fnc_makePersistent", text format ["Processing '%1' persistence...", _object], true] call DEFUNC(utils,debug);
+if (isNil "_object" || isNull _object) exitWith { [EGVAR(db,debug), "adf_db_fnc_makePersistent", "No object to make persistent.", true] call DEFUNC(utils,debug); };
+
+[EGVAR(db,debug), "adf_db_fnc_makePersistent", format ["Processing '%1' persistence...", _object], true] call DEFUNC(utils,debug);
 
 private _objectID = _array find _object;
 
 if (_objectID == -1) then {
     _array pushback _object;
-    [EGVAR(db,debug), "adf_db_fnc_makePersistent", text format ["'%1' is now persistent.", _object], true] call DEFUNC(utils,debug);
+    [EGVAR(db,debug), "adf_db_fnc_makePersistent", format ["'%1' is now persistent.", _object], true] call DEFUNC(utils,debug);
 } else {
-    [EGVAR(db,debug), "adf_db_fnc_makePersistent", text format ["'%1' is already persistent.", _object], true] call DEFUNC(utils,debug);
+    [EGVAR(db,debug), "adf_db_fnc_makePersistent", format ["'%1' is already persistent.", _object], true] call DEFUNC(utils,debug);
 };

@@ -29,7 +29,7 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_save_fnc_mapMarkers", text format ["Saving map markers to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_save_fnc_mapMarkers", format ["Saving map markers to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
 
 private _markersArray = [];
 private _userMarkersCounter = 1;

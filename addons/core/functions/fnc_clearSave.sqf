@@ -30,21 +30,21 @@
 
 params [["_slot", nil, [0]]];
 
-private _variables = [];
-
 [EGVAR(db,debug), "adf_core_fnc_clearSave", "Clearing save...", true] call DEFUNC(utils,debug);
 
 if (isNil "_slot") then {
-    [EGVAR(db,debug), "adf_core_fnc_clearSave", "Clearing all saves.", true] call DEFUNC(utils,debug);
-    _variables = (allVariables profileNamespace) find (format ["%1.", EGVAR(db,prefix)]);
-} else {
-    [EGVAR(db,debug), "adf_core_fnc_clearSave", text format ["Clearing save for slot '%1'.", _slot], true] call DEFUNC(utils,debug);
-    _variables = (allVariables profileNamespace) find (format ["%1.%2.", EGVAR(db,prefix), _slot]);
-};
+        [EGVAR(db,debug), "adf_core_fnc_clearSave", "Clearing all saves.", true] call DEFUNC(utils,debug);
+    } else {
+        [EGVAR(db,debug), "adf_core_fnc_clearSave", format ["Clearing save for slot '%1'.", _slot], true] call DEFUNC(utils,debug);
+    };
 
-{
-    profileNamespace setVariable [_x, nil];
-    true
-} count (_variables);
+// {
+//     if (isNil "_slot") then {
+//         if (_x find (format ["%1.", EGVAR(db,prefix)]) == 0) then { profileNamespace setVariable [_x, nil]; };
+//     } else {
+//         if (_x find (format ["%1.%2.", EGVAR(db,prefix), _slot]) == 0) then { profileNamespace setVariable [_x, nil]; };
+//     };
+//     true
+// } count (allVariables profileNamespace);
 
-saveProfileNamespace;
+// saveProfileNamespace;

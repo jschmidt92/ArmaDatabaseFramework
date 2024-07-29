@@ -29,12 +29,14 @@
 
 params [["_entity", nil, [objNull, 0, [], sideUnknown, grpNull, ""]]];
 
-[EGVAR(db,debug), "adf_generate_fnc_posDir", text format ["Generating position and rotation array for entity '%1'...", _entity], false] call DEFUNC(utils,debug);
+if (isNil "_entity" || isNull _entity) exitWith {[EGVAR(db,debug), "adf_generate_fnc_posDirData", "No entity to generate position and direction array for.", true] call DEFUNC(utils,debug); };
 
-private _entityPos = getPosATL _entity;
-private _entityRotation = getDir _entity;
-private _returnData = [_entityPos, _entityRotation];
+[EGVAR(db,debug), "adf_generate_fnc_posDir", format ["Generating position and direction array for entity '%1'...", _entity], false] call DEFUNC(utils,debug);
 
-[EGVAR(db,debug), "adf_generate_fnc_posDir", text format ["Position and rotation array for entity '%1' has been successfully generated.", _entity], false] call DEFUNC(utils,debug);
+private _pos = getPosATL _entity;
+private _dir = getDir _entity;
+private _returnData = [_pos, _dir];
+
+[EGVAR(db,debug), "adf_generate_fnc_posDir", format ["Position and direction array for entity '%1' has been successfully generated.", _entity], false] call DEFUNC(utils,debug);
 
 _returnData;

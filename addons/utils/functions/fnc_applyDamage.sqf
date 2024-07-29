@@ -30,6 +30,8 @@
 
 params [["_entity", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_hitpointsArray", [], [[], createHashMap]]];
 
+if (isNil "_entity" || _hitpointsArray isEqualTo []) exitWith { [EGVAR(db,debug), "adf_utils_fnc_applyDamage", "No entity to apply damage to.", true] call DEFUNC(utils,debug); };
+
 {
     private _key = _x;
     private _value = (_hitpointsArray # 2) # _forEachIndex;

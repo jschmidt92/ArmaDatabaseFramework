@@ -29,9 +29,15 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_load_fnc_loadContainers", text format ["Loading containers from slot '%1'...", _slot], false] call DEFUNC(utils,debug);
+private _class = "";
+private _cargo = [];
+private _posDir = [];
+
+[EGVAR(db,debug), "adf_load_fnc_loadContainers", format ["Loading containers from slot '%1'...", _slot], false] call DEFUNC(utils,debug);
 
 private _containers = ["containers", _slot] call DEFUNC(core,loadData);
+
+if (isNil "_containers" || (count _containers) == 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_loadContainers", format ["No containers to load from slot '%1'", _slot], false] call DEFUNC(utils,debug); };
 
 {
     deleteVehicle _x;
@@ -41,8 +47,8 @@ private _containers = ["containers", _slot] call DEFUNC(core,loadData);
 [EGVAR(db,conts)] call DEFUNC(utils,clearArray);
 
 {
-    private _key = _x # 0;
-    private _value = _x # 1;
+    private _key = _x;
+    private _value = _y;
 
     switch (_key) do {
         case "class": { _class = _value; };
@@ -55,7 +61,6 @@ private _containers = ["containers", _slot] call DEFUNC(core,loadData);
     [_container, _posDir] call DEFUNC(utils,applyPosDir);
     [_container, _cargo] call DEFUNC(utils,applyCargoData);
     [_container, EGVAR(db,conts)] call DEFUNC(db,makePersistent);
-    true
-} count (_containers);
+} forEach _containers;
 
-[EGVAR(db,debug), "adf_load_fnc_loadContainers", "All containers have been successfully loaded.", false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_load_fnc_loadContainers", "All containers loaded.", false] call DEFUNC(utils,debug);

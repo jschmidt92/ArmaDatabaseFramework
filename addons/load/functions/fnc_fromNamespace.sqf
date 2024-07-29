@@ -30,21 +30,23 @@
 
 params [["_namespace", "", [""]], ["_key", "", [""]]];
 
+private _value = [];
+
 switch (_namespace) do {
 	case "local": {
-		private _value = localNamespace getVariable _key;
+		_value = localNamespace getVariable _key;
 	};
 	case "mission": {
-		private _value = missionNamespace getVariable _key;
+		_value = missionProfileNamespace getVariable _key;
 	};
 	case "parsing": {
-		private _value = parsingNamespace getVariable _key;
+		_value = parsingNamespace getVariable _key;
 	};
 	case "profile": {
-		private _value = profileNamespace getVariable _key;
+		_value = missionProfileNamespace getVariable _key;
 	};
 	case "ui": {
-		private _value = uiNamespace getVariable _key;
+		_value = uiNamespace getVariable _key;
 	};
 };
 

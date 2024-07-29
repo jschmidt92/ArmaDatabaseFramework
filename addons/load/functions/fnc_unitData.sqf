@@ -24,14 +24,14 @@
  * The return <OBJECT>
  *
  * Examples:
- * [_unit, _data, _leader] call adf_load_fnc_unitData
+ * [_unit, _unitData, _leader] call adf_load_fnc_unitData
  *
  * Public: Yes
  */
 
-// [["key", "ADF_ARMADBCORE.0.player"], ["name", "J.Schmidt"], ["rating", 500]];
+params [["_unit", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_unitData", [], [[], "", createHashMap]], ["_leader", nil, [objNull, 0, [], sideUnknown, grpNull, ""]]];
 
-params [["_unit", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_data", [], [[], "", createHashMap]], ["_leader", nil, [objNull, 0, [], sideUnknown, grpNull, ""]]];
+if (isNil "_unit") exitWith {[EGVAR(db,debug), "adf_load_fnc_unitData", "No unit to load data for.", true] call DEFUNC(utils,debug); };
 
 private _tmpArgs = [_unit];
 
@@ -168,11 +168,11 @@ private _fnc_setRating = {
     };
 };
 
-[EGVAR(db,debug), "adf_load_fnc_unitData", text format ["Loading unit data for '%1'.", _unit], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_load_fnc_unitData", format ["Loading unit data for '%1'.", _unit], false] call DEFUNC(utils,debug);
 
 {
-    private _key = _x # 0;
-    private _value = _x # 1;
+    private _key = _x;
+    private _value = _y;
 
     switch (_key) do {
         case "assignedTeam": { _unit assignTeam _value; };
@@ -180,7 +180,7 @@ private _fnc_setRating = {
         case "damages": { [_unit, _value] call DEFUNC(utils,applyDamage); };
         case "face": { _unit setFace _value; };
         case "fatigue": { _unit setFatigue _value; };
-        case "formationDir": { _unit setFormDir _value; };
+        case "formDir": { _unit setFormDir _value; };
         case "generalDamage": { _unit setDamage _value; };
         case "group": { [_unit, _value] call _fnc_loadGroupUnits; };
         case "groupOrders": { [_unit, _value] call _fnc_loadGroupOrders; };
@@ -197,8 +197,7 @@ private _fnc_setRating = {
         case "variables": { [_unit, _value] call _fnc_loadVariables; };
         case "vehicle": { [_unit, _value] call DEFUNC(utils,addUnitToVehicle); };
     };
-    true
-} count (_data);
+} forEach _unitData;
 
 _unit = _tmpArgs call _fnc_createUnit;
 _unit setVariable ["BIS_enableRandomization", false];
@@ -206,3 +205,5 @@ _unit setVariable ["BIS_enableRandomization", false];
 [_unit] call _fnc_removeGroupUnits;
 [_unit, _leader] call _fnc_joinGroupLeader;
 _unit;
+
+[EGVAR(db,debug), "adf_load_fnc_unitData", "Unit data loaded.", false] call DEFUNC(utils,debug);

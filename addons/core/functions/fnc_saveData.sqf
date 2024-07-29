@@ -13,7 +13,7 @@
  * PO Box 1866, Mountain View, CA 94042
  *
  * [Description]
- * Save data in profileNamespace using specified key, value, and slot.
+ * Save data in missionProfileNamespace using specified key, value, and slot.
  *
  * Arguments:
  * 0: Name of key <STRING> (default: "")
@@ -33,10 +33,9 @@
 params [["_key", "", [""]], ["_value", "", [[], 0, "", false, createHashMap]], ["_slot", 0, [0]]];
 
 private _id = format ["%1.%2.%3", EGVAR(db,prefix), _slot, _key];
-private _hashMap = createHashMapFromArray [
-    ["key", _id],
-    _value
-];
+private _hashMap = createHashMapFromArray _value;
+
+_hashMap set ["id", _id];
 
 missionProfileNamespace setVariable [_id, _hashMap];
-[EGVAR(db,debug), "adf_core_fnc_saveData", text format ["Saved data to '%1'.", _id], true] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_core_fnc_saveData", format ["Saved data to '%1'.", _id], true] call DEFUNC(utils,debug);
