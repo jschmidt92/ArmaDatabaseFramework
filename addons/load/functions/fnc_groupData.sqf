@@ -34,30 +34,7 @@ params [["_groupData", [], [[], "", createHashMap]], ["_leader", nil, [objNull, 
 if (isNil "_groupData" || (count _groupData) <= 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_groupData", "No group data to load.", false] call DEFUNC(utils,debug); };
 
 private _class = "";
-private _damages = [];
-private _face = "";
-private _fatigue = 0;
-private _firstName = "";
-private _formDir = 0;
-private _generalDamage = 0;
-private _group = [];
-private _groupOrders = [];
-private _joinedNames = "";
-private _loadout = [];
-private _orders = [];
-private _name = [];
-private _pitch = 0;
-private _posDir = [];
-private _rating = 0;
 private _side = sideUnknown;
-private _skills = [];
-private _speaker = "";
-private _stamina = 0;
-private _surname = "";
-private _team = "";
-private _tmpArgs = [];
-private _variables = [];
-private _vehicle = [];
 
 private _fnc_loadOrders = {
     params ["_unit", "_ordersArray"];
@@ -70,7 +47,6 @@ private _fnc_loadOrders = {
             case "behaviour": { _unit setBehaviour _value; };
             case "unitPos": { _unit setUnitPos _value; };
         };
-
         true
     } count (_ordersArray);
 };
@@ -120,7 +96,10 @@ private _fnc_loadSkills = {
     params ["_unit", "_skillsArray"];
 
     {
-        _unit setSkill [_x # 0, _x # 1];
+        private _key = _x # 0;
+        private _value = _x # 1;
+
+        _unit setSkill [_key, _value];
         true
     } count (_skillsArray);
 };
@@ -159,65 +138,49 @@ private _fnc_setRating = {
     private _value = _x # 1;
 
     switch (_key) do {
-        case "assignedTeam": { _team = _value; };
         case "class": { _class = _value; };
-        case "damages": { _damages = _value; };
-        case "face": { _face = _value; };
-        case "fatigue": { _fatigue = _value; };
-        case "formDir": { _formDir = _value; };
-        case "generalDamage": { _generalDamage = _value; };
-        case "group": { _group = _value; };
-        case "groupOrders": { _groupOrders = _value; };
-        case "loadout": { _loadout = _value; };
-        case "orders": { _orders = _value; };
-        case "name": { _name = _value; };
-        case "pitch": { _pitch = _value; };
-        case "posDir": { _posDir = _value; };
-        case "rating": { _rating = _value; };
         case "side": { _side = _value; };
-        case "skills": { _skills = _value; };
-        case "speaker": { _speaker = _value; };
-        case "stamina": { _stamina = _value; };
-        case "variables": { _variables = _value; };
-        case "vehicle": { _vehicle = _value; };
     };
-} forEach _groupData;
+    true
+} count _groupData;
 
 private _unit = (createGroup _side) createUnit [_class, [0, 0, 0], [], 0, "FORM"];
 
-diag_log text format ["Unit created: '%1'", _unit];
+waitUntil { !isNil "_unit" };
 
 [EGVAR(db,debug), "adf_load_fnc_unitData", format ["Loading unit group data for '%1'.", _unit], false] call DEFUNC(utils,debug);
+
+{
+    private _key = _x # 0;
+    private _value = _x # 1;
+
+    switch (_key) do {
+        case "assignedTeam": { _unit assignTeam _value; };
+        case "damages": { [_unit, _value] call DEFUNC(utils,applyDamage); };
+        case "face": { _unit setFace _value; };
+        case "fatigue": { _unit setFatigue _value; };
+        case "formDir": { _unit setFormDir _value; };
+        case "generalDamage": { _unit setDamage _value; };
+        case "group": { [_unit, _value] call _fnc_loadGroupUnits; };
+        case "groupOrders": { [_unit, _value] call _fnc_loadGroupOrders; };
+        case "loadout": { _unit setUnitLoadout _value; };
+        case "name": { [_unit, _value] call _fnc_restoreName; };
+        case "orders": { [_unit, _value] call _fnc_loadOrders; };
+        case "pitch": { _unit setPitch _value; };
+        case "posDir": { [_unit, _value] call DEFUNC(utils,applyPosDir); };
+        case "rating": { [_unit, _value] call _fnc_setRating; };
+        case "skills": { [_unit, _value] call _fnc_loadSkills; };
+        case "speaker": { _unit setSpeaker _value; };
+        case "stamina": { _unit setStamina _value; };
+        case "variables": { [_unit, _value] call _fnc_loadVariables; };
+        case "vehicle": { [_unit, _value] call DEFUNC(utils,addUnitToVehicle); };
+    };
+    true
+} count (_groupData);
+
+[EGVAR(db,debug), "adf_load_fnc_unitData", "Unit group data loaded.", false] call DEFUNC(utils,debug);
 
 _unit setVariable ["BIS_enableRandomization", false];
 
 [_unit] joinSilent _leader;
-
-[_unit, _groupOrders] call _fnc_loadGroupOrders;
-[_unit, _name] call  _fnc_restoreName;
-[_unit, _orders] call _fnc_loadOrders;
-[_unit, _rating] call _fnc_setRating;
-[_unit, _skills] call _fnc_loadSkills;
-[_unit, _variables] call _fnc_loadVariables;
-
-
-[_unit, _damages] call DEFUNC(utils,applyDamage);
-[_unit, _posDir] call DEFUNC(utils,applyPosDir);
-[_unit, _vehicle] call DEFUNC(utils,addUnitToVehicle);
-
-diag_log text format ["Unit position set: '%1'", getPos _unit];
-
-_unit assignTeam _team;
-_unit setDamage _generalDamage;
-_unit setFatigue _fatigue;
-_unit setFormDir _formDir;
-_unit setStamina _stamina;
-_unit setFace _face;
-_unit setPitch _pitch;
-_unit setSpeaker _speaker;
-_unit setUnitLoadout _loadout;
 _unit;
-
-diag_log text format ["Final unit state: '%1', Position: '%2'", _unit, getPos _unit];
-
-[EGVAR(db,debug), "adf_load_fnc_unitData", "Unit group data loaded.", false] call DEFUNC(utils,debug);

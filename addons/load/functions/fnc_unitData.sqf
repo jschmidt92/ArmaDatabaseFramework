@@ -68,7 +68,7 @@ private _fnc_loadGroupUnits = {
     params ["_leader", "_group"];
     
     {
-       [_x, _leader] call DFUNC(groupData);
+       [_x, _leader] spawn DFUNC(groupData);
        true
     } count (_group);
 };
