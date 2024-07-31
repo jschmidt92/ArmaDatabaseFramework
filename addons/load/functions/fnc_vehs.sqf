@@ -49,8 +49,6 @@ if (count EGVAR(db,vehs) > 0) then {
     EGVAR(db,vehs) = [];
 };
 
-diag_log format ["Loading vehicles from slot '%1': %2", _slot, _vehicles];
-
 {
     private _key = _x;
     private _value = _y;
@@ -86,10 +84,10 @@ waitUntil { !(isNil "_vehicle") };
 
             switch (_vehKey) do {
                 case "cargo": { [_vehicle, _vehValue] call DEFUNC(utils,applyCargoData); };
-                // case "damages": { [_vehicle, _vehValue] call DEFUNC(utils,applyDamage); };
+                case "damages": { [_vehicle, _vehValue] call DEFUNC(utils,applyDamage); };
                 case "fuel": { _vehicle setFuel _vehValue; };
                 case "generalDamage": { _vehicle setDamage _vehValue; };
-                case "id": { _vehicle setVariable [QEGVAR(db,vehIDKey), _vehValue]; EGVAR(db,vehs) set [_vehValue, _vehicle]; };
+                case "id": { _vehicle setVariable [EGVAR(db,vehIDKey), _vehValue]; EGVAR(db,vehs) set [_vehValue, _vehicle]; };
                 case "materials": { _materialData = _vehValue; };
                 case "posDir": { [_vehicle, _vehValue] call DEFUNC(utils,applyPosDir); };
                 case "textures": { _textureData = _vehValue; };
