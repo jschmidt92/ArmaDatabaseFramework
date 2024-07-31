@@ -39,13 +39,13 @@ private _vehicleIndex = (EGVAR(db,vehs)) find _vehicle;
 
 if (_vehicleIndex == -1) then {
     _vehicleID = count (EGVAR(db,vehs));
-    _vehicle setVariable [QEGVAR(db,vehIDKey), _vehicleID];
+    _vehicle setVariable [EGVAR(db,vehIDKey), _vehicleID];
     (EGVAR(db,vehs)) pushback _vehicle;
 
     [EGVAR(db,debug), "adf_generate_fnc_vehicleID", format ["ID for vehicle '%1' has been successfully generated.", _vehicle], false] call DEFUNC(utils,debug);
 } else {
     [EGVAR(db,debug), "adf_generate_fnc_vehicleID", format ["Vehicle '%1' already had an existing ID.", _vehicle], false] call DEFUNC(utils,debug);
-	_vehicleID = ((EGVAR(db,vehs)) # _vehicleIndex) getVariable QEGVAR(db,vehIDKey);
+	_vehicleID = ((EGVAR(db,vehs)) # _vehicleIndex) getVariable EGVAR(db,vehIDKey);
 };
 
 _vehicleID;

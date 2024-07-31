@@ -33,21 +33,28 @@ params [["_unit", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_vehicleDa
 private _vehicleAssignmentId = "";
 private _roleArray = [];
 
+
 if (isNil "_unit") exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", "No unit to assign role in vehicle", false] call DFUNC(debug); };
 
 [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["Adding '%1' to vehicle...", _unit], false] call DFUNC(debug);
 
-if (isNil "_vehicleData") exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
-if !(_vehicleData isEqualType []) exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
+if (isNil "_vehicleData" || !(_vehicleData isEqualType [])) exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
 
-private _fnc_FindAssignedVehicleInArray = {
+diag_log format ["Adding '%1' with vehicle data '%2'", _unit, _vehicleData];
+
+private _fnc_findAssignedVehicleInArray = {
 	params ["_id"];
 	private _instance = objNull;
 
+	waitUntil { (count EGVAR(db,vehs)) > 0 };
+
+
 	{
-		if (_x getVariable QEGVAR(db,vehIDKey) == _id) exitWith { _instance = _x };
-		true
-	} count (EGVAR(db,vehs));
+		private _tmpVar = _x getVariable QEGVAR(db,vehIDKey);
+		diag_log text format ["Checking vehicle '%1' with ID '%2'", _x, _tmpVar];
+	
+		if (_x getVariable QEGVAR(db,vehIDKey) == _id) exitWith { _instance = _x; };
+	} forEach EGVAR(db,vehs);
 
 	_instance;
 };
@@ -60,11 +67,12 @@ private _fnc_FindAssignedVehicleInArray = {
         case "key": { _vehicleAssignmentId = _value };
         case "role": { _roleArray = _value };
     };
-	diag_log text format ["_vehicleData: '%1': '%2'", _key, _value];
     true
 } count (_vehicleData);
 
-private _vehicleInstance = [_vehicleAssignmentId] call _fnc_FindAssignedVehicleInArray;
+private _vehicleInstance = [_vehicleAssignmentId] call _fnc_findAssignedVehicleInArray;
+
+diag_log format ["Assigning '%1' to '%2' with role '%3'", _unit, _vehicleInstance, _roleArray];
 		
 if (!(isNil "_vehicleInstance") && !(isNil "_roleArray")) then {
 	private _role = _roleArray # 0;

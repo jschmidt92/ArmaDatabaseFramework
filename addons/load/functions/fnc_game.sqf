@@ -38,6 +38,6 @@ params [["_slot", 0, [0]]];
 [_slot] call DFUNC(environment);
 [_slot] call DFUNC(mapMarkers);
 [_slot] call DFUNC(variables);
-[_slot] call DFUNC(vehs);
+[_slot] spawn DFUNC(vehs);
 
 [EGVAR(db,debug), "adf_load_fnc_game", "Progress has been successfully loaded.", true] call DEFUNC(utils,debug);

@@ -139,7 +139,7 @@ if (vehicle _unit != _unit) then {
         true
     } count (_vehicleCrew);
 
-    _vehicleData pushBack ["key", [_vehicle] call DFUNC(vehicleID)];
+    _vehicleData pushBack ["id", [_vehicle] call DFUNC(vehicleID)];
     _vehicleData pushBack ["role", _roleData];
 
     _unitData pushBack ["vehicle", _vehicleData];

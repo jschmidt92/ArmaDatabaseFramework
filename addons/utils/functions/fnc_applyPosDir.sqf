@@ -37,3 +37,5 @@ private _dir = _array # 1;
 
 _entity setPosATL _posATL;
 _entity setDir _dir;
+
+[EGVAR(db,debug), "adf_utils_fnc_applyPosDir", format ["Entity '%1' position '%2' and direction '%3' applied.", _entity, _posATL, _dir], false] call DEFUNC(utils,debug);

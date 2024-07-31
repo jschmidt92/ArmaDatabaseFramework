@@ -31,6 +31,7 @@ params [["_slot", 0, [0]]];
 
 private _vehicles = [];
 
+
 private _fnc_generateTurretArray = {
     params ["_vehicle"];
 
@@ -44,24 +45,27 @@ private _fnc_generateTurretArray = {
     _turretsArray;
 };
 
+private _fnc_generateVehicleData = {
+    params ["_vehicle"];
+    private _vehicleId = _vehicle getVariable EGVAR(db,vehIDKey);
+    private _vehicleData = ["vehicles", [
+        ["class", typeOf _vehicle],
+        ["damages", getAllHitPointsDamage _vehicle],
+        ["fuel", fuel _vehicle],
+        ["generalDamage", damage _vehicle],
+        ["id", _vehicleId],
+        ["materials", getObjectMaterials _vehicle],
+        ["posDir", [_vehicle] call DEFUNC(generate,posDirData)],
+        ["textures", getObjectTextures _vehicle],
+        ["turrets", [_vehicle] call _fnc_generateTurretArray]
+    ]];
+    _vehicleData;
+};
+
 {
-    private _vehicle = _x;
-    private _vehicleArray = [];
-
-    _vehicleArray pushBack ["cargo", [_vehicle] call DEFUNC(generate,CargoData)];
-    _vehicleArray pushBack ["class", typeOf _vehicle];
-    _vehicleArray pushBack ["damages", getAllHitPointsDamage _vehicle];
-    _vehicleArray pushBack ["fuel", fuel _vehicle];
-    _vehicleArray pushBack ["generalDamage", damage _vehicle];
-    _vehicleArray pushBack ["key", _vehicle getVariable QEGVAR(db,vehIDKey)];
-    _vehicleArray pushBack ["materials", getObjectMaterials _vehicle];
-    _vehicleArray pushBack ["posDir", [_vehicle] call DEFUNC(utils,applyPosDir)];
-    _vehicleArray pushBack ["textures", getObjectTextures _vehicle];
-    _vehicleArray pushBack ["turrets", [_vehicle] call _fnc_generateTurretArray];
-
-    _vehicles pushBack _vehicleArray;
-    true
-} count (EGVAR(db,vehs));
+    private _vehicleData = [_x] call _fnc_generateVehicleData;
+    _vehicles pushBack _vehicleData;
+} forEach EGVAR(db,vehs);
 
 ["vehicles", _vehicles, _slot] call DEFUNC(core,saveData);
 

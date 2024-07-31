@@ -146,7 +146,7 @@ private _fnc_setRating = {
 
 private _unit = (createGroup _side) createUnit [_class, [0, 0, 0], [], 0, "FORM"];
 
-waitUntil { !isNil "_unit" };
+waitUntil { !(isNil "_unit") };
 
 [EGVAR(db,debug), "adf_load_fnc_unitData", format ["Loading unit group data for '%1'.", _unit], false] call DEFUNC(utils,debug);
 
@@ -173,7 +173,7 @@ waitUntil { !isNil "_unit" };
         case "speaker": { _unit setSpeaker _value; };
         case "stamina": { _unit setStamina _value; };
         case "variables": { [_unit, _value] call _fnc_loadVariables; };
-        case "vehicle": { [_unit, _value] call DEFUNC(utils,addUnitToVehicle); };
+        case "vehicle": { [_unit, _value] spawn DEFUNC(utils,addUnitToVehicle); };
     };
     true
 } count (_groupData);

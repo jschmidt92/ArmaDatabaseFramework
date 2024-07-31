@@ -59,7 +59,7 @@ private _fnc_removeGroupUnits = {
 private _fnc_joinGroupLeader = {
     params ["_unit", "_leader"];
     
-    if (!isNil "_leader") then {
+    if (!(isNil "_leader")) then {
         [_unit] joinSilent _leader;
     };
 };
@@ -195,7 +195,7 @@ private _fnc_setRating = {
         case "speaker": { _unit setSpeaker _value; };
         case "stamina": { _unit setStamina _value; };
         case "variables": { [_unit, _value] call _fnc_loadVariables; };
-        case "vehicle": { [_unit, _value] call DEFUNC(utils,addUnitToVehicle); };
+        case "vehicle": { [_unit, _value] spawn DEFUNC(utils,addUnitToVehicle); };
     };
 } forEach _unitData;
 

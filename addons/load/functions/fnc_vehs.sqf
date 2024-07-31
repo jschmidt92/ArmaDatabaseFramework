@@ -29,14 +29,8 @@
 
 params [["_slot", 0, [0]]];
 
-private _cargo = [];
 private _class = "";
-private _damages = [];
-private _fuel = 0;
-private _generalDamage = 0;
-private _id = 0;
 private _materialData = [];
-private _posDir = [];
 private _textureData = [];
 private _turretData = [];
 
@@ -55,63 +49,74 @@ if (count EGVAR(db,vehs) > 0) then {
     EGVAR(db,vehs) = [];
 };
 
+diag_log format ["Loading vehicles from slot '%1': %2", _slot, _vehicles];
+
 {
     private _key = _x;
     private _value = _y;
 
-    switch (_key) do {
-        case "cargo": { _cargo = _value; };
-        case "class": { _class = _value; };
-        case "damages": { _damages = _value; };
-        case "fuel": { _fuel = _value; };
-        case "generalDamage": { _generalDamage = _value; };
-        case "key": { _id = _value; };
-        case "materials": { _materialData = _value; };
-        case "posDir": { _posDir = _value; };
-        case "textures": { _textureData = _value; };
-        case "turrets": { _turretData = _value; };
+    if (_key isEqualTo "vehicles") then {
+        {
+            private _vehKey = _x # 0;
+            private _vehValue = _x # 1;
+
+            switch (_vehKey) do {
+                case "class": { _class = _vehValue; break; };
+            };
+            true
+        } count (_value);
     };
+} forEach _vehicles;
 
-    private _vehicle = _class createVehicle [0, 0, 0];
+private _vehicle = _class createVehicle [0, 0, 0];
 
-    _vehicle setFuel _fuel;
-    _vehicle setDamage _generalDamage;
-    [_vehicle, _damages] call DEFUNC(utils,applyDamage);
-    [_vehicle, _cargo] call DEFUNC(utils,applyCargoData);
-    [_vehicle, _posDir] call DEFUNC(utils,applyPosDir);
+waitUntil { !(isNil "_vehicle") };
+
+{
+    private _key = _x;
+    private _value = _y;
+    private _materialData = [];
+    private _textureData = [];
+    private _turretData = [];
+
+    if (_key isEqualTo "vehicles") then {
+        {
+            private _vehKey = _x # 0;
+            private _vehValue = _x # 1;
+
+            switch (_vehKey) do {
+                case "cargo": { [_vehicle, _vehValue] call DEFUNC(utils,applyCargoData); };
+                // case "damages": { [_vehicle, _vehValue] call DEFUNC(utils,applyDamage); };
+                case "fuel": { _vehicle setFuel _vehValue; };
+                case "generalDamage": { _vehicle setDamage _vehValue; };
+                case "id": { _vehicle setVariable [QEGVAR(db,vehIDKey), _vehValue]; EGVAR(db,vehs) set [_vehValue, _vehicle]; };
+                case "materials": { _materialData = _vehValue; };
+                case "posDir": { [_vehicle, _vehValue] call DEFUNC(utils,applyPosDir); };
+                case "textures": { _textureData = _vehValue; };
+                case "turrets": { _turretData = _vehValue; };
+            };
+            true
+        } count (_value);
+    };
 
     {
         private _turretPath = _x;
-
         {
             _vehicle removeMagazinesTurret [_x, _turretPath];
-            true
-        } count (_vehicle magazinesTurret  _turretPath);
-        true
-    } count (allTurrets _vehicle);
+        } forEach (_vehicle magazinesTurret _turretPath);
+    } forEach (allTurrets _vehicle);
 
     {
-        private _class = _x # 0;
-        private _turretPath = _x # 1;
-        private _ammo = _x # 2;
-
-        _vehicle addMagazineTurret [_class, _turretPath, _ammo];
-        true
-    } count (_turretData);
+        _vehicle addMagazineTurret [_x select 0, _x select 1, _x select 2];
+    } forEach _turretData;
 
     {
         _vehicle setObjectMaterial [_forEachIndex, _x];
-        true
-    } count (_materialData);
+    } forEach _materialData;
 
     {
         _vehicle setObjectTexture [_forEachIndex, _x];
-        true
-    } count (_textureData);
-
-    _vehicle setVariable [QEGVAR(db,vehIDKey), _id];
-    
-    EGVAR(db,vehs) set [_id, _vehicle];
+    } forEach _textureData;
 } forEach _vehicles;
 
 [EGVAR(db,debug), "adf_load_fnc_vehs", "Persistent vehicles loaded.", false] call DEFUNC(utils,debug);

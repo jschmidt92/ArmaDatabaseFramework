@@ -30,12 +30,14 @@
  * Public: Yes
  */
 
+diag_log _this;
+
 params [["_key", "", [""]], ["_value", "", [[], 0, "", false, createHashMap]], ["_slot", 0, [0]]];
 
-private _id = format ["%1.%2.%3", EGVAR(db,prefix), _slot, _key];
+private _hashKey = format ["%1.%2.%3", EGVAR(db,prefix), _slot, _key];
 private _hashMap = createHashMapFromArray _value;
 
-_hashMap set ["id", _id];
+_hashMap set ["hashKey", _hashKey];
 
-missionProfileNamespace setVariable [_id, _hashMap];
-[EGVAR(db,debug), "adf_core_fnc_saveData", format ["Saved data to '%1'.", _id], true] call DEFUNC(utils,debug);
+missionProfileNamespace setVariable [_hashKey, _hashMap];
+[EGVAR(db,debug), "adf_core_fnc_saveData", format ["Saved data to '%1'.", _hashKey], true] call DEFUNC(utils,debug);
