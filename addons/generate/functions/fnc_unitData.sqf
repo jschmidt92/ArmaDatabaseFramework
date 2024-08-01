@@ -36,71 +36,6 @@ private _unitData = [];
 
 [EGVAR(db,debug), "adf_generate_fnc_unitData", format ["Generating data for '%1' (isLeader = '%2')...", _unit, _isLeader], false] call DEFUNC(utils,debug);
 
-private _fnc_generateOrders = {
-    params ["_unit"];
-
-    private _ordersArray = [];
-
-    _ordersArray pushBack ["behaviour", behaviour _unit];
-    _ordersArray pushBack ["unitPos", unitPos _unit];
-
-    _ordersArray;
-};
-
-private _fnc_generateGroupOrders = {
-    params ["_leader"];
-
-    private _group = group _leader;
-
-    private _groupOrdersArray = [];
-
-    _groupOrdersArray pushBack ["combatMode", combatMode _group];
-    _groupOrdersArray pushBack ["formation", formation _group];
-    _groupOrdersArray pushBack ["speedMode", speedMode _group];
-
-    _groupOrdersArray;
-};
-
-private _fnc_generateVariables = {
-    params ["_unit"];
-
-    private _varsArray = [];
-
-    {
-        private _splittedKey = _x splitString '_';
-
-        if (_splittedKey # 0 != 'cba' && _splittedKey # 0 != 'ace') then {
-            _varsArray pushBack [_x, _unit getVariable _x];
-        };
-        true
-    } count (allVariables _unit);
-
-    _varsArray;
-};
-
-private _fnc_generateSkills = {
-    params ["_unit"];
-
-    private _skillsArray = [];
-
-    {
-        _skillsArray pushBack [_x, _unit skill _x];
-        true
-    } count [
-        "aimingAccuracy",
-        "aimingShake",
-        "aimingSpeed",
-        "commanding",
-        "courage",
-        "general",
-        "reloadSpeed",
-        "spotDistance",
-        "spotTime"
-    ];
-
-    _skillsArray;
-};
-
 _unitData pushBack ["assignedTeam", assignedTeam _unit];
 _unitData pushBack ["class", typeOf _unit];
 _unitData pushBack ["damages", getAllHitPointsDamage _unit];
@@ -110,15 +45,15 @@ _unitData pushBack ["formDir", formationDirection _unit];
 _unitData pushBack ["generalDamage", damage _unit];
 _unitData pushBack ["loadout", getUnitLoadout _unit];
 _unitData pushBack ["name", (name _unit) splitString " "];
-_unitData pushBack ["orders", [_unit] call _fnc_generateOrders];
+_unitData pushBack ["orders", [_unit] call DFUNC(orders)];
 _unitData pushBack ["pitch", pitch _unit];
 _unitData pushBack ["posDir", [_unit] call DFUNC(posDirData)];
 _unitData pushBack ["rating", rating _unit];
 _unitData pushBack ["side", side _unit];
-_unitData pushBack ["skills", [_unit] call _fnc_generateSkills];
+_unitData pushBack ["skills", [_unit] call DFUNC(skills)];
 _unitData pushBack ["speaker", speaker _unit];
 _unitData pushBack ["stamina", getStamina _unit];
-_unitData pushBack ["variables", [_unit] call _fnc_generateVariables];
+_unitData pushBack ["variables", [_unit] call DFUNC(variables)];
 
 if (vehicle _unit != _unit) then {
     private _roleData = [];
@@ -147,8 +82,9 @@ if (vehicle _unit != _unit) then {
 
 if (_isLeader) then {
     _unitData pushBack ["group", [_unit] call DFUNC(groupData)];
-    _unitData pushBack ["groupOrders", [_unit] call _fnc_generateGroupOrders];
+    _unitData pushBack ["groupOrders", [_unit] call DFUNC(groupOrders)];
 };
 
 [EGVAR(db,debug), "adf_generate_fnc_unitData", format ["Data for '%1' (isLeader = '%2') has been successfully generated.", _unit, _isLeader], false] call DEFUNC(utils,debug);
+
 _unitData;

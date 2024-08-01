@@ -30,8 +30,6 @@
 params [["_slot", 0, [0]]];
 
 private _class = "";
-private _cargo = [];
-private _posDir = [];
 
 [EGVAR(db,debug), "adf_load_fnc_loadContainers", format ["Loading containers from slot '%1'...", _slot], false] call DEFUNC(utils,debug);
 
@@ -39,28 +37,54 @@ private _containers = ["containers", _slot] call DEFUNC(core,loadData);
 
 if (isNil "_containers" || (count _containers) == 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_loadContainers", format ["No containers to load from slot '%1'", _slot], false] call DEFUNC(utils,debug); };
 
-{
-    deleteVehicle _x;
-    true
-} count (EGVAR(db,conts));
+if (count EGVAR(db,conts) > 0) then {
+    {
+        deleteVehicle _x;
+        true
+    } count (EGVAR(db,conts));
 
-[EGVAR(db,conts)] call DEFUNC(utils,clearArray);
+    [EGVAR(db,conts)] call DEFUNC(utils,clearArray);
+    EGVAR(db,conts) = [];
+};
 
 {
     private _key = _x;
     private _value = _y;
 
-    switch (_key) do {
-        case "class": { _class = _value; };
-        case "cargo": { _cargo = _value; };
-        case "posDir": { _posDir = _value; };
+    if (_key find "container." == 0) then {
+        {
+            private _contKey = _x # 0;
+            private _contValue = _x # 1;
+
+            switch (_contKey) do {
+                case "class": { _class = _contValue; break; };
+            };
+            true
+        } count (_value);
     };
+} forEach _containers;
 
-    private _container = _class createVehicle [0, 0, 0];
+private _container = _class createVehicle [0, 0, 0];
 
-    [_container, _posDir] call DEFUNC(utils,applyPosDir);
-    [_container, _cargo] call DEFUNC(utils,applyCargoData);
-    [_container, EGVAR(db,conts)] call DEFUNC(db,makePersistent);
+waitUntil { !(isNil "_container") };
+
+{
+    private _key = _x;
+    private _value = _y;
+
+    if (_key find "container." == 0) then {
+        {
+            private _contKey = _x # 0;
+            private _contValue = _x # 1;
+
+            switch (_contKey) do {
+                case "cargo": { [_container, _contValue] call DEFUNC(utils,applyCargoData); };
+                case "id": { _container setVariable [EGVAR(db,contIDKey), _contValue]; EGVAR(db,conts) set [_contValue, _container]; };
+                case "posDir": { [_container, _contValue] call DEFUNC(utils,applyPosDir); };
+            };
+            true
+        } count (_value);
+    };
 } forEach _containers;
 
 [EGVAR(db,debug), "adf_load_fnc_loadContainers", "All containers loaded.", false] call DEFUNC(utils,debug);

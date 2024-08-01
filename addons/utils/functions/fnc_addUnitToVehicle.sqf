@@ -40,21 +40,6 @@ if (isNil "_unit") exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle"
 
 if (isNil "_vehicleData" || !(_vehicleData isEqualType [])) exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
 
-private _fnc_findAssignedVehicleInArray = {
-	params ["_id"];
-	private _instance = objNull;
-
-	waitUntil { (count EGVAR(db,vehs)) > 0 };
-
-	{
-		private _vehID = _x getVariable EGVAR(db,vehIDKey);
-		if (_vehID == _id) exitWith { _instance = _x; };
-		true
-	} count (EGVAR(db,vehs));
-
-	_instance;
-};
-
 {
     private _key = _x # 0;
     private _value = _x # 1;
@@ -66,7 +51,9 @@ private _fnc_findAssignedVehicleInArray = {
     true
 } count (_vehicleData);
 
-private _vehInst = [_vehAssgnID] call _fnc_findAssignedVehicleInArray;
+waitUntil { (count EGVAR(db,vehs)) > 0 };
+
+private _vehInst = [_vehAssgnID] call DEFUNC(helpers,findAssignedVeh);
 		
 if (!(isNil "_vehInst") && !(isNil "_vehRoleArr")) then {
 	private _role = _vehRoleArr # 0;

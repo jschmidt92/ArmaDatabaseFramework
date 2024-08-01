@@ -29,21 +29,26 @@
 
 params [["_slot", 0, [0]]];
 
-[EGVAR(db,debug), "adf_save_fnc_containers", format ["Saving containers to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_save_fnc_containers", format ["Saving containers to slot '%1'...", _slot], false] call DEFUNC(utils,debug);
 
 private _containers = [];
 
+private _fnc_generateContainerData = {
+    params ["_container"];
+    private _containerId = _container getVariable EGVAR(db,contIDKey);
+    private _containerData = [format ["container.%1", _containerId], [
+        ["class", typeOf _container],
+        ["cargo", [_container] call DEFUNC(generate,cargoData)],
+        ["id", _containerId],
+        ["posDir", [_container] call DEFUNC(generate,posDirData)]
+    ]];
+    _containerData;
+};
+
 {
-    private _container = _x;
-    private _containerData = [];
-    
-    _containerData pushBack ["class", typeOf _container];
-    _containerData pushBack ["cargo", [_container] call DEFUNC(generate,cargoData)];
-    _containerData pushBack ["posDir", [_container] call DEFUNC(utils,applyPosDir)];
-        
+    private _containerData = [_x] call _fnc_generateContainerData;
     _containers pushBack _containerData;
-    true
-} count (EGVAR(db,conts));
+} forEach EGVAR(db,conts);
 
 ["containers", _containers, _slot] call DEFUNC(core,saveData);
 

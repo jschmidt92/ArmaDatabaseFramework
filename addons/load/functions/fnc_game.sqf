@@ -33,7 +33,7 @@ params [["_slot", 0, [0]]];
 
 [_slot] call DEFUNC(utils,clearGarbage);
 
-[_slot] call DFUNC(containers);
+[_slot] spawn DFUNC(containers);
 [_slot] call DFUNC(player);
 [_slot] call DFUNC(environment);
 [_slot] call DFUNC(mapMarkers);

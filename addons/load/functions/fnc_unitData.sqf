@@ -35,139 +35,6 @@ if (isNil "_unit") exitWith {[EGVAR(db,debug), "adf_load_fnc_unitData", "No unit
 
 private _tmpArgs = [_unit];
 
-private _fnc_createUnit = {
-    params ["_unit", "_class", "_side"];
-    
-    if (isNil { _unit }) then {
-        _unit = (createGroup _side) createUnit [_class, [0, 0, 0], [], 0, "FORM"];
-    };
-    
-    _unit;
-};
-
-private _fnc_removeGroupUnits = {
-    params ["_unit"];
-    
-    {
-        if (_unit != _x) then {
-            deleteVehicle _x;
-        };
-        true
-    } count (units _unit);
-};
-
-private _fnc_joinGroupLeader = {
-    params ["_unit", "_leader"];
-    
-    if (!(isNil "_leader")) then {
-        [_unit] joinSilent _leader;
-    };
-};
-
-private _fnc_loadGroupUnits = {
-    params ["_leader", "_group"];
-    
-    {
-       [_x, _leader] spawn DFUNC(groupData);
-       true
-    } count (_group);
-};
-
-private _fnc_loadOrders = {
-    params ["_unit", "_ordersArray"];
-
-    {
-        private _key = _x # 0;
-        private _value = _x # 1;
-
-        switch (_key) do {
-            case "behaviour": { _unit setBehaviour _value; };
-            case "unitPos": { _unit setUnitPos _value; };
-        };
-
-        true
-    } count (_ordersArray);
-};
-
-private _fnc_loadGroupOrders = {
-    params ["_unit", "_groupOrdersArray"];
-
-    private _group = group _unit;
-
-    if (leader _group == _unit) then {
-        {
-            private _key = _x # 0;
-            private _value = _x # 1;
-
-            switch (_key) do {
-                case "combatMode": { _group setCombatMode _value; };
-                case "formation": { _group setFormation _value; };
-                case "speedMode": { _group setSpeedMode _value; };
-            };
-            true
-        } count (_groupOrdersArray);
-    };
-};
-
-private _fnc_loadVariables = {
-    params ["_unit", "_varsArray"];
-
-    {
-        _unit setVariable [_x, nil];
-        true
-    } count (allVariables _unit);
-
-    {
-        private _key = _x # 0;
-        private _value = _x # 1;
-
-        if (isNil "_value") then {
-            _unit setVariable [_key, nil];
-        } else {
-            _unit setVariable [_key, _value];
-        };
-        true
-    } count (_varsArray);
-};
-
-private _fnc_loadSkills = {
-    params ["_unit", "_skillsArray"];
-
-    {
-        _unit setSkill [_x # 0, _x # 1];
-        true
-    } count (_skillsArray);
-};
-
-private _fnc_restoreName = {
-    params ["_unit", "_nameArray"];
-    
-    private _firstName = "";
-    private _surname = "";
-    private _joinedNames = "";
-    
-    if (count _nameArray == 1) then {
-        _surname = _nameArray # 0;
-        _joinedNames = _surname;
-    } else {
-        _firstName = _nameArray # 0;
-        _surname = _nameArray # 1;
-        _joinedNames = format ["%1 %2", _firstName, _surname];
-    };
-    
-    _unit setName [_joinedNames, _firstName, _surname];
-};
-
-private _fnc_setRating = {
-    params ["_unit", "_rating"];
-
-    if (rating _unit > _rating) then {
-        _unit addRating -(rating _unit - _rating);
-    } else {
-        _unit addRating (_rating - rating _unit);
-    };
-};
-
 [EGVAR(db,debug), "adf_load_fnc_unitData", format ["Loading unit data for '%1'.", _unit], false] call DEFUNC(utils,debug);
 
 {
@@ -182,28 +49,28 @@ private _fnc_setRating = {
         case "fatigue": { _unit setFatigue _value; };
         case "formDir": { _unit setFormDir _value; };
         case "generalDamage": { _unit setDamage _value; };
-        case "group": { [_unit, _value] call _fnc_loadGroupUnits; };
-        case "groupOrders": { [_unit, _value] call _fnc_loadGroupOrders; };
+        case "group": { [_unit, _value] call DEFUNC(helpers,addGroupUnits); };
+        case "groupOrders": { [_unit, _value] call DEFUNC(helpers,setGroupOrders); };
         case "loadout": { _unit setUnitLoadout _value; };
-        case "name": { [_unit, _value] call _fnc_restoreName; };
-        case "orders": { [_unit, _value] call _fnc_loadOrders; };
+        case "name": { [_unit, _value] call DEFUNC(helpers,restoreName); };
+        case "orders": { [_unit, _value] call DEFUNC(helpers,setOrders); };
         case "pitch": { _unit setPitch _value; };
         case "posDir": { [_unit, _value] call DEFUNC(utils,applyPosDir); };
-        case "rating": { [_unit, _value] call _fnc_setRating; };
+        case "rating": { [_unit, _value] call DEFUNC(helpers,setRating); };
         case "side": { _tmpArgs pushBack _value; };
-        case "skills": { [_unit, _value] call _fnc_loadSkills; };
+        case "skills": { [_unit, _value] call DEFUNC(helpers,setSkills); };
         case "speaker": { _unit setSpeaker _value; };
         case "stamina": { _unit setStamina _value; };
-        case "variables": { [_unit, _value] call _fnc_loadVariables; };
+        case "variables": { [_unit, _value] call DEFUNC(helpers,setVariables); };
         case "vehicle": { [_unit, _value] spawn DEFUNC(utils,addUnitToVehicle); };
     };
 } forEach _unitData;
 
-_unit = _tmpArgs call _fnc_createUnit;
+_unit = _tmpArgs call DEFUNC(helpers,createUnit);
 _unit setVariable ["BIS_enableRandomization", false];
 
-[_unit] call _fnc_removeGroupUnits;
-[_unit, _leader] call _fnc_joinGroupLeader;
+[_unit] call DEFUNC(helpers,removeGroupUnits);
+[_unit, _leader] call DEFUNC(helpers,joinGroup);
 _unit;
 
 [EGVAR(db,debug), "adf_load_fnc_unitData", "Unit data loaded.", false] call DEFUNC(utils,debug);

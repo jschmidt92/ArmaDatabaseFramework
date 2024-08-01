@@ -28,12 +28,12 @@
  * Public: Yes
  */
 
-params [["_typeOfTarget", 0, [0]]];
+params [["_typeOfTarget", nil, [0]]];
 
 private _cursorTarget = cursorTarget;
 private _objectToSave = objNull;
 
-switch { _typeOfTarget } do {
+switch (_typeOfTarget) do {
     case 0: {
         if (_cursorTarget isKindOf "Air" || _cursorTarget isKindOf "LandVehicle" || _cursorTarget isKindOf "Ship") then {
             _objectToSave = _cursorTarget;
@@ -45,16 +45,10 @@ switch { _typeOfTarget } do {
     };
     case 1: {
         _objectToSave = _cursorTarget;
-        [_objectToSave, EGVAR(db,conts)] call DFUNC(makePersistent);
-        [EGVAR(db,debug), "adf_db_fnc_saveTarget", format ["Container '%1' is now persistent", _cursorTarget], true] call DEFUNC(utils,debug);
+        [_objectToSave] call DEFUNC(generate,containerID);
+        [EGVAR(db,debug), "adf_db_fnc_saveTarget", format ["Added '%1' to save queue", _cursorTarget], true] call DEFUNC(utils,debug);
     };
     default {
-        if (_cursorTarget isKindOf "Air" || _cursorTarget isKindOf "LandVehicle" || _cursorTarget isKindOf "Ship") then {
-            _objectToSave = _cursorTarget;
-            [_objectToSave] call DEFUNC(generate,vehicleID);
-            [EGVAR(db,debug), "adf_db_fnc_saveTarget", format ["Added '%1' to save queue", _cursorTarget], true] call DEFUNC(utils,debug);
-        } else {
-            [EGVAR(db,debug), "adf_db_fnc_saveTarget", format ["Target '%1' is not a vehicle", _cursorTarget], true] call DEFUNC(utils,debug);
-        };
+        [EGVAR(db,debug), "adf_db_fnc_saveTarget", format ["Unknown type of target '%1'", _typeOfTarget], true] call DEFUNC(utils,debug);
     };
 };

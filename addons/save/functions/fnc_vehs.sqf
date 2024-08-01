@@ -29,6 +29,8 @@
 
 params [["_slot", 0, [0]]];
 
+[EGVAR(db,debug), "adf_save_fnc_vehs", format ["Saving vehicles to slot '%1'...", _slot], false] call DEFUNC(utils,debug);
+
 private _vehicles = [];
 
 
@@ -48,7 +50,7 @@ private _fnc_generateTurretArray = {
 private _fnc_generateVehicleData = {
     params ["_vehicle"];
     private _vehicleId = _vehicle getVariable EGVAR(db,vehIDKey);
-    private _vehicleData = ["vehicles", [
+    private _vehicleData = [format ["vehicle.%1", _vehicleId], [
         ["class", typeOf _vehicle],
         ["damages", getAllHitPointsDamage _vehicle],
         ["fuel", fuel _vehicle],
@@ -69,4 +71,4 @@ private _fnc_generateVehicleData = {
 
 ["vehicles", _vehicles, _slot] call DEFUNC(core,saveData);
 
-[EGVAR(db,debug), "adf_save_fnc_vehs", format ["Vehicles saved to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
+[EGVAR(db,debug), "adf_save_fnc_vehs", "Vehicles saved.", false] call DEFUNC(utils,debug);

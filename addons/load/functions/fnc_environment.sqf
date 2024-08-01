@@ -41,12 +41,12 @@ if (isNil "_environment" || (count _environment) == 1) exitWith { [EGVAR(db,debu
 
     switch (_key) do {
         case "date": { setDate _value; };
-        case "rain": { 0 setRain _value; };
-        case "fog": { 0 setFog _value; };
-        case "overcast": { 0 setOvercast _value; };
+        case "rain": { 15 setRain _value; };
+        case "fog": { 15 setFog _value; };
+        case "overcast": { 15 setOvercast _value; };
     };
 } forEach _environment;
 
 [EGVAR(db,debug), "adf_load_fnc_environment", "Environment data loaded.", false] call DEFUNC(utils,debug);
 
-forceWeatherChange;
+// forceWeatherChange;

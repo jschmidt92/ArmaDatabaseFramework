@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 
 /*
- * Function: adf_db_fnc_init
+ * Function: adf_helpers_fnc_setSkills
  * Author: NikolaiF90, J.Schmidt
  * Edit: 07.27.2024
  * Copyright © 2024 NikolaiF90, J.Schmidt, All rights reserved
@@ -13,7 +13,7 @@
  * PO Box 1866, Mountain View, CA 94042
  *
  * [Description]
- * Initialize the framework.
+ * N/A
  *
  * Arguments:
  * N/A
@@ -22,22 +22,17 @@
  * N/A
  *
  * Examples:
- * [] call adf_db_fnc_init
+ * N/A
  *
  * Public: Yes
  */
 
-[true, "adf_db_fnc_init", format ["Starting '%1'...", Scenario_Name], false] call DEFUNC(utils,debug);
+params ["_unit", "_skillsArray"];
 
-EGVAR(db,configDone) = false;
-[] call DFUNC(config);
-waitUntil { EGVAR(db,configDone) };
+{
+    private _key = _x # 0;
+    private _value = _x # 1;
 
-EGVAR(db,defaultSlots) = ["Empty Slot"];
-
-// Keys
-EGVAR(db,pListKey) = Scenario_Name + "_pList"; 
-EGVAR(db,vehIDKey) = "Save_VQueueID";
-EGVAR(db,contIDKey) = "Save_CQueueID";
-
-EGVAR(db,host) addAction ["<t color='#0089f2'>Persistent</t>", { [] call DFUNC(openPersistentTab); }];
+    _unit setSkill [_key, _value];
+    true
+} count (_skillsArray);

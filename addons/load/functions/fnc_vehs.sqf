@@ -53,7 +53,7 @@ if (count EGVAR(db,vehs) > 0) then {
     private _key = _x;
     private _value = _y;
 
-    if (_key isEqualTo "vehicles") then {
+    if (_key find "vehicle." == 0) then {
         {
             private _vehKey = _x # 0;
             private _vehValue = _x # 1;
@@ -77,7 +77,7 @@ waitUntil { !(isNil "_vehicle") };
     private _textureData = [];
     private _turretData = [];
 
-    if (_key isEqualTo "vehicles") then {
+    if (_key find "vehicle." == 0) then {
         {
             private _vehKey = _x # 0;
             private _vehValue = _x # 1;

@@ -44,4 +44,5 @@ private _unitsData = [];
 } count (_groupArray);
 
 [EGVAR(db,debug), "adf_generate_fnc_groupData", format ["Group data for leader '%1' has been successfully generated.", _leader], false] call DEFUNC(utils,debug);
+
 _unitsData;

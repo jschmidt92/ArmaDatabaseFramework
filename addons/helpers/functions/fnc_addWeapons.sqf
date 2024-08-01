@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 
 /*
- * Function: adf_db_fnc_init
+ * Function: adf_helpers_fnc_addWeapons
  * Author: NikolaiF90, J.Schmidt
  * Edit: 07.27.2024
  * Copyright © 2024 NikolaiF90, J.Schmidt, All rights reserved
@@ -13,31 +13,24 @@
  * PO Box 1866, Mountain View, CA 94042
  *
  * [Description]
- * Initialize the framework.
+ * Adds weapons to a container.
  *
  * Arguments:
- * N/A
+ * 0: Container object <OBJECT> (default: nil)
+ * 1: Types of weapons to add to container <ARRAY> (default: [])
  *
  * Return Value:
  * N/A
  *
  * Examples:
- * [] call adf_db_fnc_init
+ * [_container, _weapons] call adf_helpers_fnc_addWeapons
  *
  * Public: Yes
  */
 
-[true, "adf_db_fnc_init", format ["Starting '%1'...", Scenario_Name], false] call DEFUNC(utils,debug);
+params ["_container", "_weaponsArray"];
 
-EGVAR(db,configDone) = false;
-[] call DFUNC(config);
-waitUntil { EGVAR(db,configDone) };
-
-EGVAR(db,defaultSlots) = ["Empty Slot"];
-
-// Keys
-EGVAR(db,pListKey) = Scenario_Name + "_pList"; 
-EGVAR(db,vehIDKey) = "Save_VQueueID";
-EGVAR(db,contIDKey) = "Save_CQueueID";
-
-EGVAR(db,host) addAction ["<t color='#0089f2'>Persistent</t>", { [] call DFUNC(openPersistentTab); }];
+{
+    _container addWeaponWithAttachmentsCargo [_x, 1];
+    true
+} count (_weaponsArray);
