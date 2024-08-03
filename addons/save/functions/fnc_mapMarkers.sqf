@@ -31,33 +31,33 @@ params [["_slot", 0, [0]]];
 
 [EGVAR(db,debug), "adf_save_fnc_mapMarkers", format ["Saving map markers to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
 
-private _markersArray = [];
-private _userMarkersCounter = 1;
+private _markers = createHashMap;
+private _count = 1;
 private _allMarkers = allMapMarkers;
 //  private _allMarkers = allMapMarkers - markersToExclude;
 
 {
-    private _marker = [];
+    private _data = createHashMap;
     private _name = _x;
 
     if ((_name splitString ' ') # 0 == "_USER_DEFINED") then {
-        _name = format ["_USER_DEFINED %1_STORED", _userMarkersCounter];
-        _userMarkersCounter = _userMarkersCounter + 1;
+        _name = format ["_USER_DEFINED %1_STORED", _count];
+        _count = _count + 1;
     };
 
-    _marker pushBack ["name", _name];    
-    _marker pushBack ["alpha", markerAlpha _x];
-    _marker pushBack ["brush", markerBrush _x];
-    _marker pushBack ["color", markerColor _x];
-    _marker pushBack ["dir", markerDir _x];
-    _marker pushBack ["position", markerPos _x];
-    _marker pushBack ["shape", markerShape _x];
-    _marker pushBack ["size", markerSize _x];
-    _marker pushBack ["text", markerText _x];
-    _marker pushBack ["type", markerType _x];
+    _data set ["name", _name];    
+    _data set ["alpha", markerAlpha _x];
+    _data set ["brush", markerBrush _x];
+    _data set ["color", markerColor _x];
+    _data set ["dir", markerDir _x];
+    _data set ["id", _forEachIndex];
+    _data set ["position", markerPos _x];
+    _data set ["shape", markerShape _x];
+    _data set ["size", markerSize _x];
+    _data set ["text", markerText _x];
+    _data set ["type", markerType _x];
     
-    _markersArray pushBack _marker;
-    true
-} count (_allMarkers);
+    _markers set [format ["marker.%1", _forEachIndex], _data];
+} forEach _allMarkers;
 
-["markers", _markersArray, _slot] call DEFUNC(core,saveData);
+["markers", _markers, _slot] call DEFUNC(core,saveData);

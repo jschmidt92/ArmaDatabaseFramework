@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 
 /*
- * Function: adf_generate_fnc_variables
+ * Function: adf_generate_fnc_turretData
  * Author: NikolaiF90, J.Schmidt
  * Edit: 07.27.2024
  * Copyright © 2024 NikolaiF90, J.Schmidt, All rights reserved
@@ -13,30 +13,26 @@
  * PO Box 1866, Mountain View, CA 94042
  *
  * [Description]
- * N/A
+ * Generate turret data for a vehicle.
  *
  * Arguments:
- * N/A
+ * 0: Entity object <OBJECT> (default: nil)
  *
  * Return Value:
- * N/A
+ * The return <ARRAY>
  *
  * Examples:
- * N/A
+ * [veh1] call adf_generate_fnc_turretData
  *
  * Public: Yes
  */
 
-params ["_unit"];
+params ["_vehicle"];
 
-private _varsArray = [];
+private _turretsArray = [];
 
 {
-    private _splittedKey = _x splitString '_';
+    _turretsArray pushBack _x;
+} forEach (magazinesAllTurrets _vehicle);
 
-    if (_splittedKey # 0 != 'cba' && _splittedKey # 0 != 'ace') then {
-        _varsArray pushBack [_x, _unit getVariable _x];
-    };
-} forEach (allVariables _unit);
-
-_varsArray;
+_turretsArray;

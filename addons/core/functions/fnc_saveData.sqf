@@ -35,7 +35,13 @@ diag_log _this;
 params [["_key", "", [""]], ["_value", "", [[], 0, "", false, createHashMap]], ["_slot", 0, [0]]];
 
 private _hashKey = format ["%1.%2.%3", EGVAR(db,prefix), _slot, _key];
-private _hashMap = createHashMapFromArray _value;
+private _hashMap = createHashMap;
+
+if (_value isEqualType createHashMap) then {
+    _hashMap = _value;
+} else {
+    _hashMap = createHashMapFromArray _value
+};
 
 _hashMap set ["hashKey", _hashKey];
 

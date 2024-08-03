@@ -27,22 +27,25 @@
  * Public: Yes
  */
 
-params [["_leader", nil, [objNull, 0, [], sideUnknown, grpNull, ""]]];
 
-if (isNil "_leader" || isNull _leader) exitWith {[EGVAR(db,debug), "adf_generate_fnc_groupData", "No entity to generate group data for.", true] call DEFUNC(utils,debug); };
+params [["_leader", objNull, [objNull]]];
+
+if (isNull _leader) exitWith {
+    [EGVAR(db,debug), "adf_generate_fnc_groupData", "No entity to generate group data for.", true] call DEFUNC(utils,debug);
+    createHashMap
+};
 
 private _groupArray = units group _leader;
-private _unitsData = [];
+private _groupData = createHashMap;
 
 [EGVAR(db,debug), "adf_generate_fnc_groupData", format ["Generating group data for leader '%1'...", _leader], false] call DEFUNC(utils,debug);
 
 {
     if (_x != _leader && alive _x) then {
-        _unitsData pushBack ([_x, false] call DFUNC(unitData));
+        _groupData set [format ["unit.%1", _forEachIndex], ([_x, false] call DFUNC(unitData))];
     };
-    true
-} count (_groupArray);
+} forEach _groupArray;
 
 [EGVAR(db,debug), "adf_generate_fnc_groupData", format ["Group data for leader '%1' has been successfully generated.", _leader], false] call DEFUNC(utils,debug);
 
-_unitsData;
+_groupData

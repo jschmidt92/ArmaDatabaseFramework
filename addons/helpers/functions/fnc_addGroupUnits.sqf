@@ -30,6 +30,7 @@
 params ["_leader", "_group"];
 
 {
-    [_x, _leader] spawn DEFUNC(load,groupData);
-    true
-} count (_group);
+    private _key = _x;
+    private _value = _group get _key;
+    [_value, _leader] spawn DEFUNC(load,groupData);
+} forEach _group;

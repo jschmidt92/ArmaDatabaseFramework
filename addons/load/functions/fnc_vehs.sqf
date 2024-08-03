@@ -29,92 +29,48 @@
 
 params [["_slot", 0, [0]]];
 
-private _class = "";
-private _materialData = [];
-private _textureData = [];
-private _turretData = [];
-
 [EGVAR(db,debug), "adf_load_fnc_vehs", format ["Loading persistent vehicles from slot '%1'", _slot], false] call DEFUNC(utils,debug);
 
 private _vehicles = ["vehicles", _slot] call DEFUNC(core,loadData);
 
-if (isNil "_vehicles" || (count _vehicles) == 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_vehs", format ["No vehicles to load from slot '%1'", _slot], false] call DEFUNC(utils,debug); };
-if (count EGVAR(db,vehs) > 0) then {
-    {
-        deleteVehicle _x;
-        true
-    } count (EGVAR(db,vehs));
+if (isNil "_vehicles" || (count _vehicles) <= 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_vehs", format ["No vehicles to load from slot '%1'", _slot], false] call DEFUNC(utils,debug); };
 
-    [EGVAR(db,vehs)] call DEFUNC(utils,clearArray);
-    EGVAR(db,vehs) = [];
-};
+{ deleteVehicle _x } forEach EGVAR(db,vehs);
+[EGVAR(db,vehs)] call DEFUNC(utils,clearArray);
 
 {
-    private _key = _x;
     private _value = _y;
+    if (_x select [0, 8] == "vehicle.") then {
+        private _vehicle = _value getOrDefault ["class", ""] createVehicle [0,0,0];
 
-    if (_key find "vehicle." == 0) then {
+        [_vehicle, _value getOrDefault ["cargo", []]] call DEFUNC(utils,applyCargoData);
+        [_vehicle, _value getOrDefault ["damages", []]] call DEFUNC(utils,applyDamage);
+        _vehicle setFuel (_value getOrDefault ["fuel", 1]);
+        _vehicle setDamage (_value getOrDefault ["generalDamage", 0]);
+        _vehicle setVariable [EGVAR(db,vehIDKey), _forEachIndex];
+        [_vehicle, _value getOrDefault ["posDir", []]] call DEFUNC(utils,applyPosDir);
+
         {
-            private _vehKey = _x # 0;
-            private _vehValue = _x # 1;
+            private _turretPath = _x;
+            {
+                _vehicle removeMagazinesTurret [_x, _turretPath];
+            } forEach (_vehicle magazinesTurret _turretPath);
+        } forEach (allTurrets _vehicle);
 
-            switch (_vehKey) do {
-                case "class": { _class = _vehValue; break; };
-            };
-            true
-        } count (_value);
+        {
+            _vehicle addMagazineTurret [_x # 0, _x # 1, _x # 2];
+        } forEach (_value getOrDefault ["turrets", []]);
+
+        {
+            _vehicle setObjectMaterial [_forEachIndex, _x];
+        } forEach (_value getOrDefault ["materials", []]);
+
+        {
+            _vehicle setObjectTexture [_forEachIndex, _x];
+        } forEach (_value getOrDefault ["textures", []]);
+
+        EGVAR(db,vehs) pushBack _vehicle;
     };
-} forEach _vehicles;
-
-private _vehicle = _class createVehicle [0, 0, 0];
-
-waitUntil { !(isNil "_vehicle") };
-
-{
-    private _key = _x;
-    private _value = _y;
-    private _materialData = [];
-    private _textureData = [];
-    private _turretData = [];
-
-    if (_key find "vehicle." == 0) then {
-        {
-            private _vehKey = _x # 0;
-            private _vehValue = _x # 1;
-
-            switch (_vehKey) do {
-                case "cargo": { [_vehicle, _vehValue] call DEFUNC(utils,applyCargoData); };
-                case "damages": { [_vehicle, _vehValue] call DEFUNC(utils,applyDamage); };
-                case "fuel": { _vehicle setFuel _vehValue; };
-                case "generalDamage": { _vehicle setDamage _vehValue; };
-                case "id": { _vehicle setVariable [EGVAR(db,vehIDKey), _vehValue]; EGVAR(db,vehs) set [_vehValue, _vehicle]; };
-                case "materials": { _materialData = _vehValue; };
-                case "posDir": { [_vehicle, _vehValue] call DEFUNC(utils,applyPosDir); };
-                case "textures": { _textureData = _vehValue; };
-                case "turrets": { _turretData = _vehValue; };
-            };
-            true
-        } count (_value);
-    };
-
-    {
-        private _turretPath = _x;
-        {
-            _vehicle removeMagazinesTurret [_x, _turretPath];
-        } forEach (_vehicle magazinesTurret _turretPath);
-    } forEach (allTurrets _vehicle);
-
-    {
-        _vehicle addMagazineTurret [_x select 0, _x select 1, _x select 2];
-    } forEach _turretData;
-
-    {
-        _vehicle setObjectMaterial [_forEachIndex, _x];
-    } forEach _materialData;
-
-    {
-        _vehicle setObjectTexture [_forEachIndex, _x];
-    } forEach _textureData;
 } forEach _vehicles;
 
 [EGVAR(db,debug), "adf_load_fnc_vehs", "Persistent vehicles loaded.", false] call DEFUNC(utils,debug);

@@ -29,62 +29,34 @@
 
 params [["_slot", 0, [0]]];
 
-private _class = "";
-
 [EGVAR(db,debug), "adf_load_fnc_loadContainers", format ["Loading containers from slot '%1'...", _slot], false] call DEFUNC(utils,debug);
 
 private _containers = ["containers", _slot] call DEFUNC(core,loadData);
 
 if (isNil "_containers" || (count _containers) == 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_loadContainers", format ["No containers to load from slot '%1'", _slot], false] call DEFUNC(utils,debug); };
 
-if (count EGVAR(db,conts) > 0) then {
-    {
-        deleteVehicle _x;
-        true
-    } count (EGVAR(db,conts));
-
-    [EGVAR(db,conts)] call DEFUNC(utils,clearArray);
-    EGVAR(db,conts) = [];
-};
+{ deleteVehicle _x } forEach EGVAR(db,conts);
+[EGVAR(db,conts)] call DEFUNC(utils,clearArray);
 
 {
     private _key = _x;
-    private _value = _y;
+    private _value = _containers get _key;
 
-    if (_key find "container." == 0) then {
-        {
-            private _contKey = _x # 0;
-            private _contValue = _x # 1;
+    if (_key select [0, 10] == "container.") then {
+        private _cargo = _value getOrDefault ["cargo", []];
+        private _class = _value getOrDefault ["class", ""];
+        private _id = _value getOrDefault ["id", 0];
+        private _posDir = _value getOrDefault ["posDir", []];
 
-            switch (_contKey) do {
-                case "class": { _class = _contValue; break; };
-            };
-            true
-        } count (_value);
+        if (_class != "") then {
+            private _container = createVehicle [_class, [0,0,0], [], 0, "NONE"];
+
+            [_container, _cargo] call DEFUNC(utils,applyCargoData);
+            _container setVariable [EGVAR(db,contIDKey), _id];
+            EGVAR(db,conts) pushBack _container;
+            [_container, _posDir] call DEFUNC(utils,applyPosDir);
+        };
     };
-} forEach _containers;
-
-private _container = _class createVehicle [0, 0, 0];
-
-waitUntil { !(isNil "_container") };
-
-{
-    private _key = _x;
-    private _value = _y;
-
-    if (_key find "container." == 0) then {
-        {
-            private _contKey = _x # 0;
-            private _contValue = _x # 1;
-
-            switch (_contKey) do {
-                case "cargo": { [_container, _contValue] call DEFUNC(utils,applyCargoData); };
-                case "id": { _container setVariable [EGVAR(db,contIDKey), _contValue]; EGVAR(db,conts) set [_contValue, _container]; };
-                case "posDir": { [_container, _contValue] call DEFUNC(utils,applyPosDir); };
-            };
-            true
-        } count (_value);
-    };
-} forEach _containers;
+} forEach keys _containers;
 
 [EGVAR(db,debug), "adf_load_fnc_loadContainers", "All containers loaded.", false] call DEFUNC(utils,debug);

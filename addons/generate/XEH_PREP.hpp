@@ -6,6 +6,7 @@ PREP(groupOrders);
 PREP(orders);
 PREP(posDirData);
 PREP(skills);
+PREP(turretData);
 PREP(unitData);
 PREP(variables);
 PREP(vehicleID);

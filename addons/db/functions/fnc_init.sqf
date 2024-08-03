@@ -36,8 +36,8 @@ waitUntil { EGVAR(db,configDone) };
 EGVAR(db,defaultSlots) = ["Empty Slot"];
 
 // Keys
-EGVAR(db,pListKey) = Scenario_Name + "_pList"; 
-EGVAR(db,vehIDKey) = "Save_VQueueID";
+EGVAR(db,pListKey) = Scenario_Name + "_pList";
 EGVAR(db,contIDKey) = "Save_CQueueID";
+EGVAR(db,vehIDKey) = "Save_VQueueID";
 
 EGVAR(db,host) addAction ["<t color='#0089f2'>Persistent</t>", { [] call DFUNC(openPersistentTab); }];

@@ -28,28 +28,26 @@
  * Public: Yes
  */
 
-params [["_unit", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_vehicleData", nil, [[]]]];
+params [["_unit", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_vehicleData", nil, [createHashMap]]];
 
 private _vehAssgnID = 0;
 private _vehRoleArr = [];
-
 
 if (isNil "_unit") exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", "No unit to assign role in vehicle", false] call DFUNC(debug); };
 
 [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["Adding '%1' to vehicle...", _unit], false] call DFUNC(debug);
 
-if (isNil "_vehicleData" || !(_vehicleData isEqualType [])) exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
+if ((count _vehicleData) <= 1) exitWith { [EGVAR(db,debug), "adf_utils_fnc_addUnitToVehicle", format ["'%1' has no vehicle", _unit], false] call DFUNC(debug); };
 
 {
-    private _key = _x # 0;
-    private _value = _x # 1;
+    private _key = _x;
+    private _value = _vehicleData get _key;
 
     switch (_key) do {
         case "id": { _vehAssgnID = _value };
         case "role": { _vehRoleArr = _value };
     };
-    true
-} count (_vehicleData);
+} forEach keys _vehicleData;
 
 waitUntil { (count EGVAR(db,vehs)) > 0 };
 

@@ -32,53 +32,38 @@ params [["_slot", 0, [0]]];
 [EGVAR(db,debug), "adf_load_fnc_mapMarkers", format ["Loading map markers from slot '%1'...", _slot], false] call DEFUNC(utils,debug);
 
 private _allMarkers = allMapMarkers;
-private _alpha = 0;
-private _brush = "";
-private _color = "";
-private _dir = 0;
-private _name = "";
-private _position = [0,0,0];
-private _shape = "";
-private _size = [];
-private _text = "";
-private _type = "";
 
-{
-    deleteMarker _x;
-    true
-} count (_allMarkers);
+{ deleteVehicle _x } forEach _allMarkers;
+[_allMarkers] call DEFUNC(utils,clearArray);
 
 private _markers = ["markers", _slot] call DEFUNC(core,loadData);
 
 if (isNil "_markers" || (count _markers) == 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_mapMarkers", format ["No markers to load from slot '%1'.", _slot], true] call DEFUNC(utils,debug); };
 
 {
-    private _key =  _x;
-    private _value = _y;
-    
-    switch (_key) do {
-        case "alpha": { _alpha = _value; };
-        case "brush": { _brush = _value; };
-        case "color": { _color = _value; };
-        case "dir": { _dir = _value; };
-        case "name": { _name = _value; };
-        case "position": { _position = _value; };
-        case "shape": { _shape = _value; };
-        case "size": { _size = _value; };
-        case "text": { _text = _value; };
-        case "type": { _type = _value; };
-    };
+    private _namespace = _x;
+    private _nameValuePairs = _y;
 
-    private _marker = createMarker [_name, _position];
-    
-    _marker setMarkerAlpha _alpha;
-    _marker setMarkerBrush _brush;
-    _marker setMarkerColor _color;
-    _marker setMarkerDir _dir;
-    _marker setMarkerShape _shape;
-    _marker setMarkerSize _size;
-    _marker setMarkerText _text;
-    _marker setMarkerType _type;
+    if (_namespace select [0, 7] == "marker.") then {
+        private _marker = createMarker [_nameValuePairs getOrDefault ["name", ""], _nameValuePairs getOrDefault ["position", []]];
+
+        {
+            private _key = _x;
+            private _value = _y;
+
+            switch (_key) do {
+                case "alpha": { _marker setMarkerAlpha _value };
+                case "brush": { _marker setMarkerBrush _value };
+                case "color": { _marker setMarkerColor _value };
+                case "dir": { _marker setMarkerDir _value };
+                case "position": { _marker setMarkerPos _value };
+                case "shape": { _marker setMarkerShape _value };
+                case "size": { _marker setMarkerSize _value };
+                case "text": { _marker setMarkerText _value };
+                case "type": { _marker setMarkerType _value };
+            };
+        } forEach _nameValuePairs;
+    };
 } forEach _markers;
 
 [EGVAR(db,debug), "adf_load_fnc_mapMarkers", "Map markers loaded.", false] call DEFUNC(utils,debug);

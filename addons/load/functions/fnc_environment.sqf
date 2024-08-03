@@ -35,18 +35,18 @@ private _environment = ["environment", _slot] call DEFUNC(core,loadData);
 
 if (isNil "_environment" || (count _environment) == 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_environment", format ["No environment data to load from slot '%1'", _slot], false] call DEFUNC(utils,debug); };
 
+private _transitionTime = 15;
+
 {
-    private _key =  _x;
+    private _key = _x;
     private _value = _y;
 
     switch (_key) do {
-        case "date": { setDate _value; };
-        case "rain": { 15 setRain _value; };
-        case "fog": { 15 setFog _value; };
-        case "overcast": { 15 setOvercast _value; };
+        case "date": { setDate _value };
+        case "rain": { _transitionTime setRain _value };
+        case "fog": { _transitionTime setFog _value };
+        case "overcast": { _transitionTime setOvercast _value };
     };
 } forEach _environment;
 
 [EGVAR(db,debug), "adf_load_fnc_environment", "Environment data loaded.", false] call DEFUNC(utils,debug);
-
-// forceWeatherChange;

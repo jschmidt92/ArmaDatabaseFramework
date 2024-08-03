@@ -31,11 +31,11 @@ params [["_slot", 0, [0]]];
 
 [EGVAR(db,debug), "adf_save_fnc_environment", format ["Saving environment info to slot '%1'.", _slot], false] call DEFUNC(utils,debug);
 
-private _environment = [];
+private _environment = createHashMap;
 
-_environment pushBack ["date", date];
-_environment pushBack ["rain", rain];
-_environment pushBack ["fog", fog];
-_environment pushBack ["overcast", overcast];
+_environment set ["date", date];
+_environment set ["rain", rain];
+_environment set ["fog", fog];
+_environment set ["overcast", overcast];
 
 ["environment", _environment, _slot] call DEFUNC(core,saveData);

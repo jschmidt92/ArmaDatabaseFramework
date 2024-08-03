@@ -31,42 +31,24 @@ params [["_slot", 0, [0]]];
 
 [EGVAR(db,debug), "adf_save_fnc_vehs", format ["Saving vehicles to slot '%1'...", _slot], false] call DEFUNC(utils,debug);
 
-private _vehicles = [];
-
-
-private _fnc_generateTurretArray = {
-    params ["_vehicle"];
-
-    private _turretsArray = [];
-
-    {
-        _turretsArray pushBack _x;
-        true
-    } count (magazinesAllTurrets _vehicle);
-
-    _turretsArray;
-};
-
-private _fnc_generateVehicleData = {
-    params ["_vehicle"];
-    private _vehicleId = _vehicle getVariable EGVAR(db,vehIDKey);
-    private _vehicleData = [format ["vehicle.%1", _vehicleId], [
-        ["class", typeOf _vehicle],
-        ["damages", getAllHitPointsDamage _vehicle],
-        ["fuel", fuel _vehicle],
-        ["generalDamage", damage _vehicle],
-        ["id", _vehicleId],
-        ["materials", getObjectMaterials _vehicle],
-        ["posDir", [_vehicle] call DEFUNC(generate,posDirData)],
-        ["textures", getObjectTextures _vehicle],
-        ["turrets", [_vehicle] call _fnc_generateTurretArray]
-    ]];
-    _vehicleData;
-};
+private _vehicles = createHashMap;
 
 {
-    private _vehicleData = [_x] call _fnc_generateVehicleData;
-    _vehicles pushBack _vehicleData;
+    private _vehicle = _x;
+    private _id = _vehicle getVariable EGVAR(db,vehIDKey);
+    private _data = createHashMap;
+
+    _data set ["class", typeOf _vehicle];
+    _data set ["cargo", [_vehicle] call DEFUNC(generate,cargoData)];
+    _data set ["damages", getAllHitPointsDamage _vehicle];
+    _data set ["fuel", fuel _vehicle];
+    _data set ["generalDamage", damage _vehicle];
+    _data set ["materials", getObjectMaterials _vehicle];
+    _data set ["posDir", [_vehicle] call DEFUNC(generate,posDirData)];
+    _data set ["textures", getObjectTextures _vehicle];
+    _data set ["turrets", [_vehicle] call DEFUNC(generate,turretData)];
+
+    _vehicles set [format ["vehicle.%1", _id], _data];
 } forEach EGVAR(db,vehs);
 
 ["vehicles", _vehicles, _slot] call DEFUNC(core,saveData);

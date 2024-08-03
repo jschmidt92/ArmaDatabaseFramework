@@ -28,63 +28,59 @@
  * Public: Yes
  */
 
-params [["_unit", nil, [objNull, 0, [], sideUnknown, grpNull, ""]], ["_isLeader", false, [false]]];
+params [["_unit", objNull, [objNull]], ["_isLeader", false, [false]]];
 
-if (isNil "_unit" || isNull _unit) exitWith {[EGVAR(db,debug), "adf_generate_fnc_unitData", "No unit to generate data for.", true] call DEFUNC(utils,debug); };
+if (isNull _unit) exitWith {
+    [EGVAR(db,debug), "adf_generate_fnc_unitData", "No unit to generate data for.", true] call DEFUNC(utils,debug);
+    createHashMap
+};
 
-private _unitData = [];
+private _unitData = createHashMap;
 
 [EGVAR(db,debug), "adf_generate_fnc_unitData", format ["Generating data for '%1' (isLeader = '%2')...", _unit, _isLeader], false] call DEFUNC(utils,debug);
 
-_unitData pushBack ["assignedTeam", assignedTeam _unit];
-_unitData pushBack ["class", typeOf _unit];
-_unitData pushBack ["damages", getAllHitPointsDamage _unit];
-_unitData pushBack ["face", face _unit];
-_unitData pushBack ["fatigue", getFatigue _unit];
-_unitData pushBack ["formDir", formationDirection _unit];
-_unitData pushBack ["generalDamage", damage _unit];
-_unitData pushBack ["loadout", getUnitLoadout _unit];
-_unitData pushBack ["name", (name _unit) splitString " "];
-_unitData pushBack ["orders", [_unit] call DFUNC(orders)];
-_unitData pushBack ["pitch", pitch _unit];
-_unitData pushBack ["posDir", [_unit] call DFUNC(posDirData)];
-_unitData pushBack ["rating", rating _unit];
-_unitData pushBack ["side", side _unit];
-_unitData pushBack ["skills", [_unit] call DFUNC(skills)];
-_unitData pushBack ["speaker", speaker _unit];
-_unitData pushBack ["stamina", getStamina _unit];
-_unitData pushBack ["variables", [_unit] call DFUNC(variables)];
+_unitData set ["assignedTeam", assignedTeam _unit];
+_unitData set ["class", typeOf _unit];
+_unitData set ["damages", getAllHitPointsDamage _unit];
+_unitData set ["face", face _unit];
+_unitData set ["fatigue", getFatigue _unit];
+_unitData set ["formDir", formationDirection _unit];
+_unitData set ["generalDamage", damage _unit];
+_unitData set ["loadout", getUnitLoadout _unit];
+_unitData set ["name", (name _unit) splitString " "];
+_unitData set ["orders", [_unit] call DFUNC(orders)];
+_unitData set ["pitch", pitch _unit];
+_unitData set ["posDir", [_unit] call DFUNC(posDirData)];
+_unitData set ["rating", rating _unit];
+_unitData set ["side", side _unit];
+_unitData set ["skills", [_unit] call DFUNC(skills)];
+_unitData set ["speaker", speaker _unit];
+_unitData set ["stamina", getStamina _unit];
+_unitData set ["variables", [_unit] call DFUNC(variables)];
 
 if (vehicle _unit != _unit) then {
-    private _roleData = [];
     private _vehicle = vehicle _unit;
     private _vehicleCrew = fullCrew vehicle _unit;
-    private _vehicleData = [];
+    private _vehicleData = createHashMap;
 
     {
-        private _selectedUnit = _x # 0;
-        if (_unit == _selectedUnit) exitWith {
-            private _role = _x # 1;
-            private _cargoIndex = _x # 2;
-            private _turretPath = _x # 3;
-            private _personTurret = _x # 4;
-            _roleData = [_role, _cargoIndex, _turretPath, _personTurret];
-            [EGVAR(db,debug), "adf_generate_fnc_unitData", format ["Role data for '%1' generated: '%2'", _unit, _roleData], false] call DEFUNC(utils,debug);
+        _x params ["_assignedUnit", "_role", "_cargoIndex", "_turretPath", "_personTurret"];
+
+        if (_unit == _assignedUnit) exitWith {
+            _vehicleData set ["role", [_role, _cargoIndex, _turretPath, _personTurret]];
+            [EGVAR(db,debug), "adf_generate_fnc_unitData", format ["Vehicle role data for '%1' generated: '%2'", _unit, _vehicleData get "role"], false] call DEFUNC(utils,debug);
         };
-        true
-    } count (_vehicleCrew);
+    } forEach _vehicleCrew;
 
-    _vehicleData pushBack ["id", [_vehicle] call DFUNC(vehicleID)];
-    _vehicleData pushBack ["role", _roleData];
-
-    _unitData pushBack ["vehicle", _vehicleData];
+    _vehicleData set ["id", [_vehicle] call DFUNC(vehicleID)];
+    _unitData set ["vehicle", _vehicleData];
 };
 
 if (_isLeader) then {
-    _unitData pushBack ["group", [_unit] call DFUNC(groupData)];
-    _unitData pushBack ["groupOrders", [_unit] call DFUNC(groupOrders)];
+    _unitData set ["group", [_unit] call DFUNC(groupData)];
+    _unitData set ["groupOrders", [_unit] call DFUNC(groupOrders)];
 };
 
 [EGVAR(db,debug), "adf_generate_fnc_unitData", format ["Data for '%1' (isLeader = '%2') has been successfully generated.", _unit, _isLeader], false] call DEFUNC(utils,debug);
 
-_unitData;
+_unitData

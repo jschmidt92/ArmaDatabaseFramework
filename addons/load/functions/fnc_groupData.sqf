@@ -29,33 +29,22 @@
  * Public: Yes
  */
 
-params [["_groupData", [], [[], "", createHashMap]], ["_leader", nil, [objNull, 0, [], sideUnknown, grpNull, ""]]];
+params [["_groupData", createHashMap, [createHashMap]], ["_leader", objNull, [objNull]]];
 
-if (isNil "_groupData" || (count _groupData) <= 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_groupData", "No group data to load.", false] call DEFUNC(utils,debug); };
+if (count _groupData <= 1) exitWith { [EGVAR(db,debug), "adf_load_fnc_groupData", "No group data to load.", false] call DEFUNC(utils,debug); };
 
-private _class = "";
-private _side = sideUnknown;
-
-{
-    private _key = _x # 0;
-    private _value = _x # 1;
-
-    switch (_key) do {
-        case "class": { _class = _value; };
-        case "side": { _side = _value; };
-    };
-    true
-} count _groupData;
+private _class = _groupData getOrDefault ["class", ""];
+private _side = _groupData getOrDefault ["side", sideUnknown];
 
 private _unit = (createGroup _side) createUnit [_class, [0, 0, 0], [], 0, "FORM"];
 
-waitUntil { !(isNil "_unit") };
+waitUntil { !isNull _unit };
 
 [EGVAR(db,debug), "adf_load_fnc_unitData", format ["Loading unit group data for '%1'.", _unit], false] call DEFUNC(utils,debug);
 
 {
-    private _key = _x # 0;
-    private _value = _x # 1;
+    private _key = _x;
+    private _value = _y;
 
     switch (_key) do {
         case "assignedTeam": { _unit assignTeam _value; };
@@ -77,12 +66,11 @@ waitUntil { !(isNil "_unit") };
         case "variables": { [_unit, _value] call DEFUNC(helpers,setVariables); };
         case "vehicle": { [_unit, _value] spawn DEFUNC(utils,addUnitToVehicle); };
     };
-    true
-} count (_groupData);
+} forEach _groupData;
+
+_unit setVariable ["BIS_enableRandomization", false];
+[_unit] joinSilent _leader;
 
 [EGVAR(db,debug), "adf_load_fnc_unitData", "Unit group data loaded.", false] call DEFUNC(utils,debug);
 
-_unit setVariable ["BIS_enableRandomization", false];
-
-[_unit] joinSilent _leader;
-_unit;
+_unit

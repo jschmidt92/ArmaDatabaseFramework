@@ -33,11 +33,11 @@ private _return = "";
 private _time = systemTime;
 private _hour = _time # 3;
 private _minute = _time # 4;
-private _day = _time # 2;
 private _month = _time # 1;
+private _day = _time # 2;
 private _year = _time # 0;
 
-private _string = format ["%1:%2 %3/%4/%5", _hour, _minute, _day, _month, _year];
+private _string = format ["%1:%2 %3/%4/%5", _hour, _minute, _month, _day, _year];
 
 EGVAR(db,saveTime) = _string;
 _return = _string;
