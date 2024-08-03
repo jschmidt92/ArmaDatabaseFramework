@@ -2,19 +2,69 @@ name: Build
 
 on:
   push:
+    branches: [master]
+    paths-ignore:
+      - ".github/**"
+      - "addons/main/script_version.hpp"
+      - "tools/**"
+      - "README.md"
   workflow_dispatch:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Bump Version
+        id: bump-version
+        run: python3 tools/version_bumper.py increment_build push_commit
+
       - name: Setup HEMTT
         uses: arma-actions/hemtt@v1
+
       - name: Run HEMTT build
         run: hemtt release
-      - name: Upload Release
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-            name: armadatabaseframework-latest
-            path: release/armadatabaseframework-latest.zip
+          name: armadatabaseframework
+          path: releases/
+    outputs:
+      VERSION: ${{ steps.bump-version.outputs.VERSION }}
+
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: armadatabaseframework
+
+      - name: List Directory
+        run: ls -R
+
+      - name: Create GitHub Release
+        id: create-new-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_name: armadatabaseframework_v${{ needs.build.outputs.VERSION }}
+          tag_name: ${{ needs.build.outputs.VERSION }}
+
+      - name: Upload Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-new-release.outputs.upload_url }}
+          asset_path: ./armadatabaseframework-latest.zip
+          asset_name: armadatabaseframework_v${{ needs.build.outputs.VERSION }}.zip
+          asset_content_type: application/zip
