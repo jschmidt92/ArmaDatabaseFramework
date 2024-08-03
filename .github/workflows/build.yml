@@ -7,8 +7,13 @@ on:
       - ".github/**"
       - "addons/main/script_version.hpp"
       - "tools/**"
-      - "README.md"
+      # - "README.md"
   workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
 
 jobs:
   build:
